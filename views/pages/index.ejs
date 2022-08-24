@@ -16,15 +16,15 @@
                 <% } %>
             <div class="row g-3">
                 <div class="col form-floating">
-                    <input type="text" name="cognome" class="form-control" id="surnameInput" placeholder="Inserisci il tuo cognome" required>
+                    <input type="text" name="surname" class="form-control" id="surnameInput" placeholder="Inserisci il tuo cognome" required>
                     <label for="surnameInput">Cognome</label>
                 </div>
                 <div class="col form-floating">
-                    <input type="text" name="nome" class="form-control" id="nameInput" placeholder="Inserisci il tuo nome" required>
+                    <input type="text" name="name" class="form-control" id="nameInput" placeholder="Inserisci il tuo nome" required>
                     <label for="nameInput">Nome</label>
                 </div>
                 <div class="smlDiv col form-floating">
-                    <select name="sesso" class="form-select" id="sexSelect" aria-label="Sesso" required>
+                    <select name="sex" class="form-select" id="sexSelect" aria-label="Sesso" required>
                       <option selected value="m">M</option>
                       <option value="f">F</option>
                     </select>
@@ -33,31 +33,31 @@
             </div>
             <div class="row g-3">
                 <div class="col form-floating">
-                    <input type="text" name="luogonascita" class="form-control" id="cityInput" placeholder="Inserisci il tuo luogo di nascita" required>
+                    <input type="text" name="birthPlace" class="form-control" id="cityInput" placeholder="Inserisci il tuo luogo di nascita" required>
                     <label for="cityInput">Luogo di nascita</label>                 
                 </div>
                 <div class="smlDiv col form-floating">
-                    <input style="text-transform: uppercase;" type="text" name="provincia" class="form-control" id="prInput" placeholder="Inserisci il tuo luogo di nascita" required>
+                    <input style="text-transform: uppercase;" type="text" name="pr" class="form-control" id="prInput" placeholder="Inserisci il tuo luogo di nascita" required>
                     <label for="prInput">Provincia</label>                 
                 </div>
             </div>
             <div class="row g-3">
                 <div class="col form-floating">
-                    <select name="giornonascita" class="form-select" id="daySelect" aria-label="Giorno di nascita" required>
+                    <select name="birthDay" class="form-select" id="daySelect" aria-label="Giorno di nascita" required>
                         <option selected>1</option>
                     </select>
                     <label for="dayInput">Giorno di nascita</label>
                 </div>
 
                 <div class="col form-floating">
-                    <select name="mesenascita" class="form-select" id="monthSelect" aria-label="Mese di nascita" required>
+                    <select name="birthMonth" class="form-select" id="monthSelect" aria-label="Mese di nascita" required>
                         <option selected>1</option>
                     </select>
                     <label for="dayInput">Mese di nascita</label>
                 </div>
 
                 <div class="smlDiv col form-floating">
-                    <select name="annonascita" class="form-select" id="yearSelect" aria-label="Anno di nascita" required>
+                    <select name="birthYear" class="form-select" id="yearSelect" aria-label="Anno di nascita" required>
                         <option selected>1900</option>
                     </select>
                     <label for="dayInput">Anno</label>
