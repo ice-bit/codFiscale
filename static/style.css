@@ -1,3 +1,4 @@
+/* elements */
 html {
     position: relative;
     min-height: 100%;
@@ -11,10 +12,12 @@ body {
     padding-bottom: 40px;
 }
 
+/* IDs */
 #cfTitle {
     padding-bottom: 30px;
 }
 
+/* classes */
 .smlDiv {
     max-width: 110px;
 }
@@ -31,7 +34,6 @@ body {
 .cfForm .form-floating:focus-within {
     z-index: 2;
 }
-
 
 .footer {
     position: absolute;
