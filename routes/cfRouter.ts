@@ -66,7 +66,6 @@ cfRouter.post("/",
         return res.render("pages/index", { 
             errorMessages: errors.array(), codFiscale: undefined
         });
-
     }
 
     const identity: Identity = req.body;
