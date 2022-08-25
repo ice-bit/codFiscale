@@ -6,5 +6,5 @@ export interface Identity {
     pr: string,
     birthDay: number,
     birthMonth: number,
-    birthYear: number
+    birthYear: string
 };

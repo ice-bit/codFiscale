@@ -31,7 +31,7 @@ const computeSurname = (surname: string): string => {
 const computeName = (name: string): string => {
     // Estrai le consonanti del nome
     const consonantiNome: string = getConsonants(name);
-    // Se le consonanti sono >= 4, prendi la prima, la terza e la quarta
+    // Se le consonanti sono >= 4, estrai la prima, la terza e la quarta
     if(consonantiNome.length >= 4) {
         let codName: string = consonantiNome[0];
         codName += consonantiNome[2];
@@ -56,12 +56,38 @@ const computeName = (name: string): string => {
     return codName;
 }
 
+const computeBirthYear = (year: string): string => year.slice(-2);
+
+const computeBirthMonth = (month: number): string => {
+    type monthT = {
+        [month: number]: string;
+    }
+    // Mappa ciascun mese al corrispondente valore
+    const monthMap: monthT = {
+        1: "A", // Gennaio
+        2: "B", // Febbraio
+        3: "C", // Marzo
+        4: "D", // Aprile
+        5: "E", // Maggio
+        6: "H", // Giugno
+        7: "L", // Luglio
+        8: "M", // Agosto
+        9: "P", // Settembre
+        10: "R", // Ottobre
+        11: "S", // Novembre
+        12: "T" // Dicembre
+    };
+
+    // Ritorna il valore corrispondente al mese scelto
+    return monthMap[month];
+}
+
 export const computeCF = (identity: Identity): Either<Error, string> => {
-    let codiceFiscale: string | undefined = undefined;
     const cognome: string = computeSurname(identity.surname);
     const nome: string = computeName(identity.name);
-
-    codiceFiscale = cognome + nome;
+    const annoNascita: string = computeBirthYear(identity.birthYear);
+    const meseNascita: string = computeBirthMonth(identity.birthMonth);
+    const codiceFiscale: string = cognome + nome + annoNascita + meseNascita;
 
     return codiceFiscale ? right(codiceFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
 }
