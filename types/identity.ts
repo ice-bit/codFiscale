@@ -1,7 +1,7 @@
 export interface Identity {
     name: string,
     surname: string,
-    sex: boolean,
+    sex: string,
     birthPlace: string,
     pr: string,
     birthDay: number,

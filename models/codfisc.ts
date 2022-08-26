@@ -1,6 +1,6 @@
 import { Identity } from "../types/identity";
 import { right, left, Either } from "fp-ts/Either";
-import { pipe } from "fp-ts/lib/function";
+import { identity, pipe } from "fp-ts/lib/function";
 
 const getConsonants = (s: string): string => {
     return Array.from(s.toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
@@ -94,9 +94,28 @@ const computeBirthMonth = (identity: Identity): Identity => {
     return identity;
 }
 
+const computeBirthDay = (identity: Identity): Identity => {
+    let birthday: number = Number(identity.birthDay);
+    // Se il soggetto e' una donna, sommare 40 al giorno di nascita
+    if(identity.sex === "female") {
+        birthday += 40;
+        identity.codFiscale += birthday;
+
+        return identity;
+    }
+
+    // Se il risultato finale <= 9, anteporre uno '0' al risultato
+    if(birthday < 10)
+        identity.codFiscale += '0';
+
+    identity.codFiscale += birthday;
+
+    return identity;
+}
+
 export const computeCF = (identity: Identity): Either<Error, string> => {
     const codiceFiscale: Identity = pipe(identity, 
-        computeSurname, computeName, computeBirthYear, computeBirthMonth);
+        computeSurname, computeName, computeBirthYear, computeBirthMonth, computeBirthDay);
 
     return codiceFiscale ? right(codiceFiscale.codFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
 }
