@@ -42,10 +42,6 @@ cfRouter.post("/",
         .not()
         .isEmpty()
         .withMessage("Inserire il luogo di nascita"),
-    check("pr")
-        .not()
-        .isEmpty()
-        .withMessage("Inserire la provincia"),
     check("birthDay")
         .not()
         .isEmpty()

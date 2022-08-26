@@ -1,6 +1,8 @@
 import { Identity } from "../types/identity";
 import { right, left, Either } from "fp-ts/Either";
-import { identity, pipe } from "fp-ts/lib/function";
+import { Option } from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
+import { getCodCat } from "./codCatastale";
 
 const getConsonants = (s: string): string => {
     return Array.from(s.toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
@@ -113,9 +115,53 @@ const computeBirthDay = (identity: Identity): Identity => {
     return identity;
 }
 
-export const computeCF = (identity: Identity): Either<Error, string> => {
-    const codiceFiscale: Identity = pipe(identity, 
-        computeSurname, computeName, computeBirthYear, computeBirthMonth, computeBirthDay);
+const computeBirthPlace = (identity: Identity): Identity => {
+    // pattern matching on-the-fly
+    const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (fa: Option<A>) => {
+        switch(fa._tag) {
+            case "None": return onNone();
+            case "Some": return onSome(fa.value);
+        }
+    }
 
+    // Prova ad ottenere il codice catastale internazionale
+    const codCat = pipe(
+        getCodCat(identity.birthPlace),
+        match(
+            () => {
+                // Se il codice non e' stato trovato, prova a cercare il codice territoriale estero
+                
+                // TODO: cercare codice territoriale estero
+                // const codEstero = foo();
+                // if(codEstero === none) {
+                //      return identity;    
+                //}
+                // identity.codFiscale += codEstero;
+                // return identity
+                console.log("here");
+            },
+            (codCat) => String(codCat)
+        )
+    );
+
+    identity.codFiscale += String(codCat);
+
+    return identity;
+}
+
+export const computeCF = (identity: Identity): Either<Error, string> => {
+    const codiceFiscale: Identity = pipe(
+        identity, 
+        computeSurname, 
+        computeName, 
+        computeBirthYear, 
+        computeBirthMonth, 
+        computeBirthDay, 
+        computeBirthPlace
+        );
+
+    
+
+    // return codiceFiscale.codFiscale.length === 16 ? right(codiceFiscale.codFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
     return codiceFiscale ? right(codiceFiscale.codFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
 }
