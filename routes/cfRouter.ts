@@ -69,5 +69,6 @@ cfRouter.post("/",
     }
 
     const identity: Identity = req.body;
+    identity.codFiscale = "";
     fold(replyError(res), replyCF(res))(computeCF(identity));    
 });

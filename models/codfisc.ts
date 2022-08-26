@@ -1,5 +1,6 @@
 import { Identity } from "../types/identity";
 import { right, left, Either } from "fp-ts/Either";
+import { pipe } from "fp-ts/lib/function";
 
 const getConsonants = (s: string): string => {
     return Array.from(s.toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
@@ -9,14 +10,14 @@ const getVowels = (s: string): string => {
     return Array.from(s.toLowerCase()).filter(c => "aeiou".includes(c)).join('');
 }
 
-const computeSurname = (surname: string): string => {
+const computeSurname = (identity: Identity): Identity => {
     // Estrai le prime tre consonanti del cognome
-    const consonantiCognome: string = getConsonants(surname);
+    const consonantiCognome: string = getConsonants(identity.surname);
     let codCognome: string = consonantiCognome.slice(0, 3);
 
     // Se le consonanti sono minori di tre, estrai pure le vocali
     if(consonantiCognome.length < 3) {
-        const vocaliCognome: string = getVowels(surname);
+        const vocaliCognome: string = getVowels(identity.surname);
         codCognome += vocaliCognome;
         codCognome = codCognome.slice(0, 3);
     }
@@ -25,26 +26,29 @@ const computeSurname = (surname: string): string => {
     if(codCognome.length < 3)
         codCognome += 'x';
 
-    return codCognome;
+    identity.codFiscale += codCognome;
+    
+    return identity;
 }
 
-const computeName = (name: string): string => {
+const computeName = (identity: Identity): Identity => {
     // Estrai le consonanti del nome
-    const consonantiNome: string = getConsonants(name);
+    const consonantiNome: string = getConsonants(identity.name);
     // Se le consonanti sono >= 4, estrai la prima, la terza e la quarta
     if(consonantiNome.length >= 4) {
         let codName: string = consonantiNome[0];
         codName += consonantiNome[2];
         codName += consonantiNome[3];
+        identity.codFiscale += codName;
 
-        return codName;
+        return identity;
     }
 
     // altrimenti prendi le prime tre consonanti in ordine
     let codName: string = consonantiNome.slice(0, 3);
     // Se le consonanti sono minori di tre, estrai pure le vocali
     if(consonantiNome.length < 3) {
-        const vocaliNome: string = getVowels(name);
+        const vocaliNome: string = getVowels(identity.name);
         codName += vocaliNome;
         codName = codName.slice(0, 3);
     }
@@ -53,12 +57,18 @@ const computeName = (name: string): string => {
     if(codName.length < 3)
         codName += 'x';
 
-    return codName;
+    identity.codFiscale += codName;
+    
+    return identity;
 }
 
-const computeBirthYear = (year: string): string => year.slice(-2);
+const computeBirthYear = (identity: Identity): Identity => {
+    identity.codFiscale += identity.birthYear.slice(-2);
 
-const computeBirthMonth = (month: number): string => {
+    return identity;
+}
+
+const computeBirthMonth = (identity: Identity): Identity => {
     type monthT = {
         [month: number]: string;
     }
@@ -79,15 +89,14 @@ const computeBirthMonth = (month: number): string => {
     };
 
     // Ritorna il valore corrispondente al mese scelto
-    return monthMap[month];
+    identity.codFiscale += monthMap[identity.birthMonth];
+
+    return identity;
 }
 
 export const computeCF = (identity: Identity): Either<Error, string> => {
-    const cognome: string = computeSurname(identity.surname);
-    const nome: string = computeName(identity.name);
-    const annoNascita: string = computeBirthYear(identity.birthYear);
-    const meseNascita: string = computeBirthMonth(identity.birthMonth);
-    const codiceFiscale: string = cognome + nome + annoNascita + meseNascita;
+    const codiceFiscale: Identity = pipe(identity, 
+        computeSurname, computeName, computeBirthYear, computeBirthMonth);
 
-    return codiceFiscale ? right(codiceFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
+    return codiceFiscale ? right(codiceFiscale.codFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
 }

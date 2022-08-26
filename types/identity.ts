@@ -6,5 +6,6 @@ export interface Identity {
     pr: string,
     birthDay: number,
     birthMonth: number,
-    birthYear: string
+    birthYear: string,
+    codFiscale: string
 };

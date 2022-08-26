@@ -25,4 +25,5 @@
         newOption.text = year.toString();
         yearSelect.add(newOption);
     });
+    yearSelect.value = "1985";
 })();
