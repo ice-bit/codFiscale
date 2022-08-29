@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
+import { Either } from "fp-ts/lib/Either";
+import { pipe } from "fp-ts/lib/function";
 import { computeCF } from "../models/codFisc";
-import { Identity } from "../types/identity";
 import { IError } from "../types/error";
+import { Identity } from "../types/identity";
 
 export const cfRouter = express.Router();
 
@@ -44,8 +46,14 @@ cfRouter.post("/",
         .withMessage("Inserire l'anno di nascita"),
 ],
 (req: Request, res: Response) => {
-    const errors = validationResult(req);
+    const match = <E, R, A>(onLeft: (left: E) => R, onRight: (right: A) => R) => (fa: Either<E, A>): R => {
+        switch(fa._tag) {
+            case "Left": return onLeft(fa.left);
+            case "Right": return onRight(fa.right);
+        }
+    }
 
+    const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.render("pages/index", { 
             errorMessages: errors.array(), codFiscale: undefined
@@ -55,19 +63,20 @@ cfRouter.post("/",
     const identity: Identity = req.body;
     identity.codFiscale = "";
     computeCF(identity).then(cfOption => {
-        switch(cfOption._tag) {
-            case "Left": {
-                res.render("pages/index", {
-                    errorMessages: [cfOption.left], codFiscale: undefined
-                });
-                break;
-            }
-            case "Right": {
-                res.render("pages/index", {
-                    errorMessages: undefined, codFiscale: cfOption.right
-                });
-                break;
-            }
-        }
+        pipe(
+            cfOption,
+            match(
+                (error: IError) => {
+                    res.render("pages/index", {
+                        errorMessages: [error], codFiscale: undefined
+                    });
+                },
+                (cf: string) => {
+                    res.render("pages/index", {
+                        errorMessages: undefined, codFiscale: cf
+                    });    
+                }
+            )
+        )
     });
 });
