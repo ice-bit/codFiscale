@@ -1,3 +1,5 @@
+import { IError } from "./error"
+
 export interface Identity {
     name: string,
     surname: string,
@@ -8,4 +10,5 @@ export interface Identity {
     birthMonth: number,
     birthYear: string,
     codFiscale: string
+    errors?: IError
 };

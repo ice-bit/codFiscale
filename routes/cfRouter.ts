@@ -56,21 +56,15 @@ cfRouter.post("/",
     identity.codFiscale = "";
     computeCF(identity).then(cfOption => {
         switch(cfOption._tag) {
-            case "None": {
-                const err: IError = {
-                    code: 400,
-                    msg: "errore durante il calcolo del CF"
-                };
-
+            case "Left": {
                 res.render("pages/index", {
-                    errorMessages: [err], codFiscale: undefined
+                    errorMessages: [cfOption.left], codFiscale: undefined
                 });
-                console.log("here");
                 break;
             }
-            case "Some": {
+            case "Right": {
                 res.render("pages/index", {
-                    errorMessages: undefined, codFiscale: cfOption.value
+                    errorMessages: undefined, codFiscale: cfOption.right
                 });
                 break;
             }

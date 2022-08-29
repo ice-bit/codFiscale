@@ -1,7 +1,8 @@
 import { Identity } from "../types/identity";
-import { Option, some, none } from "fp-ts/lib/Option";
+import { Either, left, right } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
 import { getCodCat } from "./codCatastale";
+import { IError } from "../types/error";
 
 const getConsonants = (s: string): string => {
     return Array.from(s.toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
@@ -116,12 +117,21 @@ const computeBirthDay = (identity: Identity): Identity => {
 
 const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
     const codCat: string = await getCodCat(identity.birthPlace);
-    identity.codFiscale += codCat;
+    if(!codCat) {
+        const error: IError = {
+            code: 400,
+            msg: "Il luogo di nascita selezionato non esiste"
+        };
 
+        identity.errors = error;
+        return identity;
+    }
+
+    identity.codFiscale += codCat;
     return identity;
 }
 
-export const computeCF = async (identity: Identity): Promise<Option<string>> => {
+export const computeCF = async (identity: Identity): Promise<Either<IError, string>> => {
     const codiceFiscale: Promise<Identity> = pipe(
         identity, 
         computeSurname, 
@@ -132,7 +142,7 @@ export const computeCF = async (identity: Identity): Promise<Option<string>> => 
         computeBirthPlace
     );
 
-    return (await codiceFiscale).codFiscale.length === 15
-        ? some((await codiceFiscale).codFiscale.toUpperCase())
-        : none;
+    return !(await codiceFiscale).errors
+        ? right((await codiceFiscale).codFiscale.toUpperCase())
+        : left((await codiceFiscale).errors as IError);
 }
