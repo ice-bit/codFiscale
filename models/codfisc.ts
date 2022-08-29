@@ -116,7 +116,7 @@ const computeBirthDay = (identity: Identity): Identity => {
     return identity;
 }
 
-const computeBirthPlace = async (identity: Identity) => {
+const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
     const codCat = await getCodCat(identity.birthPlace);
     identity.codFiscale += codCat;
 

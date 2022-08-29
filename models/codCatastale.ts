@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
 
 // Estrai il codice catastale dal sito dell'Agenzia Delle Entrate
@@ -6,9 +5,9 @@ export const getCodCat = async (birthPlace: string): Promise<string> => {
     const url: string = 
         `https://www1.agenziaentrate.gov.it/servizi/codici/ricerca/VisualizzaTabella.php?iniz=${birthPlace.slice(0, 12)}&ArcName=COM-ICI`;
 
-    const res = await axios(url);
-    const html = await res.data;
-    const $: cheerio.Root = cheerio.load(html);
+    const res: Response = await fetch(url);
+    const data: string = await res.text();
+    const $: cheerio.Root = cheerio.load(data);
     let result: string = "";
 
     // Seleziona attributo table
@@ -22,7 +21,7 @@ export const getCodCat = async (birthPlace: string): Promise<string> => {
         // Se la citta' corrente e' uguale a quella scelta dall'utente
         // Estrai il relativo codice catastale
         if(city.trim() === birthPlace.trim().toUpperCase())
-            result = code;
+            return result = code;
     });
 
     return result;
