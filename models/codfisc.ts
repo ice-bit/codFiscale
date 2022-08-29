@@ -14,7 +14,7 @@ const getVowels = (s: string): string => {
     return Array.from(s.toLowerCase()).filter(c => "aeiou".includes(c)).join('');
 }
 
-const computeSurname = (identity: Identity): Identity => {
+const getSurname = (identity: Identity): Identity => {
     // Estrai le prime tre consonanti del cognome
     const consonantiCognome: string = getConsonants(identity.surname);
     let codCognome: string = consonantiCognome.slice(0, 3);
@@ -35,7 +35,7 @@ const computeSurname = (identity: Identity): Identity => {
     return identity;
 }
 
-const computeName = (identity: Identity): Identity => {
+const getName = (identity: Identity): Identity => {
     // Estrai le consonanti del nome
     const consonantiNome: string = getConsonants(identity.name);
     // Se le consonanti sono >= 4, estrai la prima, la terza e la quarta
@@ -66,13 +66,13 @@ const computeName = (identity: Identity): Identity => {
     return identity;
 }
 
-const computeBirthYear = (identity: Identity): Identity => {
+const getBirthYear = (identity: Identity): Identity => {
     identity.codFiscale += identity.birthYear.slice(-2);
 
     return identity;
 }
 
-const computeBirthMonth = (identity: Identity): Identity => {
+const getBirthMonth = (identity: Identity): Identity => {
     type monthT = {
         [month: number]: string;
     }
@@ -117,7 +117,7 @@ const computeBirthDay = (identity: Identity): Identity => {
     return identity;
 }
 
-const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
+const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (fa: Option<A>) => {
         switch(fa._tag) {
             case "None": return onNone();
@@ -156,12 +156,12 @@ const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
 export const computeCF = async (identity: Identity): Promise<Either<IError, string>> => {
     const codiceFiscale: Promise<Identity> = pipe(
         identity, 
-        computeSurname, 
-        computeName, 
-        computeBirthYear, 
-        computeBirthMonth, 
+        getSurname, 
+        getName, 
+        getBirthYear, 
+        getBirthMonth,
         computeBirthDay,
-        computeBirthPlace
+        getBirthPlace
     );
 
     return !(await codiceFiscale).errors
