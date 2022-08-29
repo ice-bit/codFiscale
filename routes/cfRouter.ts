@@ -6,18 +6,6 @@ import { IError } from "../types/error";
 
 export const cfRouter = express.Router();
 
-const replyError = (res: Response, error: Error) => {
-    return res.render("pages/index", {
-        errorMessages: error.message, codFiscale: undefined
-    });
-}
-
-const replyCF = (res: Response, cf: string) => {
-    return res.render("pages/index", {
-        errorMessages: undefined, codFiscale: cf
-    });
-}
-
 cfRouter.get("/", (_: Request, res: Response) => {
     res.render("pages/index", { 
         errorMessages: undefined, codFiscale: undefined 
