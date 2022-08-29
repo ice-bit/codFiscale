@@ -46,7 +46,7 @@ const computeName = (identity: Identity): Identity => {
         return identity;
     }
 
-    // altrimenti prendi le prime tre consonanti in ordine
+    // Altrimenti prendi le prime tre consonanti in ordine
     let codName: string = consonantiNome.slice(0, 3);
     // Se le consonanti sono minori di tre, estrai pure le vocali
     if(consonantiNome.length < 3) {
@@ -116,6 +116,7 @@ const computeBirthDay = (identity: Identity): Identity => {
 }
 
 const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
+    // Estrai il codice catastale in base al comune
     const codCat: string = await getCodCat(identity.birthPlace);
     if(!codCat) {
         const error: IError = {
