@@ -1,8 +1,6 @@
 import { Identity } from "../types/identity";
-import { right, left, Either } from "fp-ts/Either";
-import { Option, some } from "fp-ts/lib/Option";
-import { pipe, flow } from "fp-ts/lib/function";
-import * as TO from "fp-ts/lib/TaskOption";
+import { Option, some, none } from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
 import { getCodCat } from "./codCatastale";
 
 const getConsonants = (s: string): string => {
@@ -117,13 +115,13 @@ const computeBirthDay = (identity: Identity): Identity => {
 }
 
 const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
-    const codCat = await getCodCat(identity.birthPlace);
+    const codCat: string = await getCodCat(identity.birthPlace);
     identity.codFiscale += codCat;
 
     return identity;
 }
 
-export const computeCF = async (identity: Identity): Promise<Identity> => {
+export const computeCF = async (identity: Identity): Promise<Option<string>> => {
     const codiceFiscale: Promise<Identity> = pipe(
         identity, 
         computeSurname, 
@@ -133,9 +131,8 @@ export const computeCF = async (identity: Identity): Promise<Identity> => {
         computeBirthDay,
         computeBirthPlace
     );
-    
-    // return codiceFiscale.codFiscale.length === 16 ? right(codiceFiscale.codFiscale.toUpperCase()) : left(new Error("Errore durante il calcolo del CF"));
-    // return codiceFiscale ? right(await codiceFiscale) : left(new Error("Errore durante il calcolo del CF"));
 
-    return codiceFiscale;
+    return (await codiceFiscale).codFiscale.length === 15
+        ? some((await codiceFiscale).codFiscale.toUpperCase())
+        : none;
 }

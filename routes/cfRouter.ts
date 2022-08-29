@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
-import { Option } from "fp-ts/lib/Option";
-import { computeCF } from "../models/codfisc";
+import { computeCF } from "../models/codFisc";
 import { Identity } from "../types/identity";
+import { IError } from "../types/error";
 
 export const cfRouter = express.Router();
 
@@ -66,27 +66,26 @@ cfRouter.post("/",
 
     const identity: Identity = req.body;
     identity.codFiscale = "";
-    // computeCF(identity).then(cfOption => {
-    //     switch(cfOption._tag) {
-    //         case "None": {
-    //             return res.render("pages/index", {
-    //                 errorMessages: undefined, codFiscale: undefined
-    //             });
-    //         }
-    //         case "Some": {
-    //             return res.render("pages/index", {
-    //                 errorMessages: undefined, codFiscale: cfOption.value.codFiscale.toUpperCase()
-    //             });
-    //         }
-    //     }
-    // }); // todo: catch
+    computeCF(identity).then(cfOption => {
+        switch(cfOption._tag) {
+            case "None": {
+                const err: IError = {
+                    code: 400,
+                    msg: "errore durante il calcolo del CF"
+                };
 
-    // TODO: refactor with Option<Identity>
-
-
-    computeCF(identity).then(cf => {
-        res.render("pages/index", {
-            errorMessages: undefined, codFiscale: cf.codFiscale.toUpperCase()
-        });
-    })
+                res.render("pages/index", {
+                    errorMessages: [err], codFiscale: undefined
+                });
+                console.log("here");
+                break;
+            }
+            case "Some": {
+                res.render("pages/index", {
+                    errorMessages: undefined, codFiscale: cfOption.value
+                });
+                break;
+            }
+        }
+    });
 });
