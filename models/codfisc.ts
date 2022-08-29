@@ -1,7 +1,9 @@
 import { Identity } from "../types/identity";
 import { Either, left, right } from "fp-ts/lib/Either";
+import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
-import { getCodCat } from "./codCatastale";
+import { getCodCatastale } from "./codCatastale";
+import { getCodNazione } from "./codNazione";
 import { IError } from "../types/error";
 
 const getConsonants = (s: string): string => {
@@ -116,19 +118,38 @@ const computeBirthDay = (identity: Identity): Identity => {
 }
 
 const computeBirthPlace = async (identity: Identity): Promise<Identity> => {
-    // Estrai il codice catastale in base al comune
-    const codCat: string = await getCodCat(identity.birthPlace);
-    if(!codCat) {
-        const error: IError = {
-            code: 400,
-            msg: "Il luogo di nascita selezionato non esiste"
-        };
-
-        identity.errors = error;
-        return identity;
+    const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (fa: Option<A>) => {
+        switch(fa._tag) {
+            case "None": return onNone();
+            case "Some": return onSome(fa.value);
+        }
     }
 
-    identity.codFiscale += codCat;
+    // Estrai il codice catastale in base al comune
+    const codCatastale: string = await getCodCatastale(identity.birthPlace);
+    if(!codCatastale) {
+        // Se il codice catastale e' nullo, prova a cercare il codice della nazione
+        const codNazione: Option<string> = await getCodNazione(identity.birthPlace);
+        pipe(
+            codNazione,
+            match(
+                () => {
+                    const error: IError = {
+                        code: 400,
+                        msg: "Il luogo di nascita selezionato non esiste"
+                    };
+                    identity.errors = error;
+                    return identity;
+                },
+                (codNazione: string) => {
+                    identity.codFiscale += codNazione;
+                    return identity;
+                }
+            )
+        );
+    }
+
+    identity.codFiscale += codCatastale;
     return identity;
 }
 

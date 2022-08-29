@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 
 // Estrai il codice catastale dal sito dell'Agenzia Delle Entrate
-export const getCodCat = async (birthPlace: string): Promise<string> => {
+export const getCodCatastale = async (birthPlace: string): Promise<string> => {
     const url: string = 
         `https://www1.agenziaentrate.gov.it/servizi/codici/ricerca/VisualizzaTabella.php?iniz=${birthPlace.slice(0, 12)}&ArcName=COM-ICI`;
 
