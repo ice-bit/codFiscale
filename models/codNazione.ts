@@ -6,5 +6,5 @@ export const getCodNazione = (birthPlace: string): Option<string> => {
     const db = new Database(path.join(__dirname +  "/../codnazioni.db"));
     const row = db.prepare("SELECT Code FROM codNazioni Where UPPER(City) = ?").get(birthPlace.toUpperCase());
 
-    return row.Code ? some(row.Code) : none;
+    return row === undefined ? none : some(row.Code);
 }
