@@ -221,7 +221,7 @@ const getControlCode = async (identity: Promise<Identity>): Promise<Identity> =>
     return identity;
 }
 
-export const getCF = async (identity: Identity): Promise<Either<IError, string>> => {
+export const getCF = async (identity: Identity): Promise<Either<IError, Identity>> => {
     const codiceFiscale: Promise<Identity> = pipe(
         identity, 
         getSurname, 
@@ -234,6 +234,6 @@ export const getCF = async (identity: Identity): Promise<Either<IError, string>>
     );
 
     return !(await codiceFiscale).errors
-        ? right((await codiceFiscale).codFiscale)
+        ? right((await codiceFiscale))
         : left((await codiceFiscale).errors as IError);
 }

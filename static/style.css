@@ -12,6 +12,10 @@ body {
     padding-bottom: 40px;
 }
 
+a, a:visited, a:hover {
+    color: inherit;
+}
+
 /* IDs */
 #cfTitle {
     padding-bottom: 30px;
@@ -42,4 +46,12 @@ body {
     height: 60px;
     line-height: 60px;
     text-align: center;
+}
+
+.card { 
+    border: 0px;
+}
+
+.cfIdentity {
+    font-size: 17px;
 }

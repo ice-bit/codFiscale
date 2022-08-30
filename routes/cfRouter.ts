@@ -10,7 +10,7 @@ export const cfRouter = express.Router();
 
 cfRouter.get("/", (_: Request, res: Response) => {
     res.render("pages/index", { 
-        errorMessages: undefined, codFiscale: undefined 
+        errorMessages: undefined
     });
 });
 
@@ -56,7 +56,7 @@ cfRouter.post("/",
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.render("pages/index", { 
-            errorMessages: errors.array(), codFiscale: undefined
+            errorMessages: errors.array()
         });
     }
 
@@ -68,12 +68,12 @@ cfRouter.post("/",
             match(
                 (error: IError) => {
                     res.render("pages/index", {
-                        errorMessages: [error], codFiscale: undefined
+                        errorMessages: [error]
                     });
                 },
-                (cf: string) => {
-                    res.render("pages/index", {
-                        errorMessages: undefined, codFiscale: cf
+                (identity: Identity) => {
+                    res.render("pages/result", {
+                        identity: identity
                     });    
                 }
             )

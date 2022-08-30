@@ -10,10 +10,6 @@
                         <% }) %>
                     </div>
                 <% } %>
-
-                <% if(codFiscale) {%>
-                    <h1 class="mt-4"><code> <%= codFiscale %> </code></h1>
-                <% } %>
             <div class="row g-3">
                 <div class="col form-floating">
                     <input type="text" name="surname" class="form-control" id="surnameInput" placeholder="Inserisci il tuo cognome" required>
@@ -67,10 +63,6 @@
         </form>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <span class="text-muted">Calcolatore codice fiscale | &copy; 2022 Marco Cetica</span>
-        </div>
-    </footer>
+    <%- include('../partials/footer') %>
     <script src="/initDate.js"></script>
 </body>
