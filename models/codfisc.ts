@@ -162,15 +162,19 @@ const getBirthPlace = async (identity: Identity): Promise<Identity> => {
 }
 
 const getControlCode = async (identity: Promise<Identity>): Promise<Identity> => {
+    (await identity).codFiscale = (await identity).codFiscale.toUpperCase();
     // Separa i caratteri in posizione dispari da quelli in posizione pari
     const oddChars: string[] = getOdd((await identity).codFiscale);
     const evenChars: string[] = getEven((await identity).codFiscale);
-    type checkMap = {
+    type sumMap = {
         [ch: string]: number
+    };
+    type modMap = {
+        [val: number]: string
     };
 
     // Mappa dei valori dispari
-    const oddMap: checkMap = {
+    const oddMap: sumMap = {
         "0": 1, "1": 0, "2": 5, "3": 7, "4": 9, "5": 13,
         "6": 15, "7": 17, "8": 19, "9": 21, "A": 1, "B": 0,
         "C": 5, "D": 7, "E": 9, "F": 13, "G": 15, "H": 17,
@@ -180,7 +184,7 @@ const getControlCode = async (identity: Promise<Identity>): Promise<Identity> =>
     };
 
     // Mappa dei valori pari
-    const evenMap: checkMap = {
+    const evenMap: sumMap = {
         "0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5,
         "6": 6, "7": 7, "8": 8, "9": 9, "A": 0, "B": 1,
         "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7,
@@ -189,13 +193,30 @@ const getControlCode = async (identity: Promise<Identity>): Promise<Identity> =>
         "U": 20, "V": 21, "W": 22, "X": 23, "Y": 24, "Z": 25
     };
 
+    // Mappa del carattere di controllo
+    const controlMap: modMap = {
+        0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F",
+        6: "G", 7: "H", 8: "I", 9: "J", 10: "K", 11: "L",
+        12: "M", 13: "N", 14: "O", 15: "P", 16: "Q", 17: "R",
+        18: "S", 19: "T", 20: "U", 21: "V", 22: "W", 23: "X",
+        24: "Y", 25: "Z"
+    };
 
-    const oddSum: number = oddChars.reduce((prev, curr) => {
-        return oddMap[prev] + oddMap[curr];
+    // Somma i valori dispari associati a ciascun carattere
+    const oddSum: number = oddChars.reduce((previousValue: number, currentValue: string, index: number) => {
+        return index === 0 ? oddMap[currentValue] : previousValue + oddMap[currentValue];
     }, 0);
 
-    console.log(oddSum);
+    // Somma i valori pari associati a ciascun carattere
+    const evenSum: number = evenChars.reduce((previousValue: number, currentValue: string, index: number) => {
+        return index === 0 ? evenMap[currentValue] : previousValue + evenMap[currentValue];
+    }, 0);
 
+    // Somma i due risultati parziali assieme ed esegui la divisione mod 26
+    const controlNumber: number = ((oddSum + evenSum) % 26);
+    
+    // Mappa il codice di controllo al relativo carattere
+    (await identity).codFiscale += controlMap[controlNumber];
 
     return identity;
 }
@@ -208,10 +229,11 @@ export const getCF = async (identity: Identity): Promise<Either<IError, string>>
         getBirthYear, 
         getBirthMonth,
         getBirthDay,
-        getBirthPlace
+        getBirthPlace,
+        getControlCode
     );
 
     return !(await codiceFiscale).errors
-        ? right((await codiceFiscale).codFiscale.toUpperCase())
+        ? right((await codiceFiscale).codFiscale)
         : left((await codiceFiscale).errors as IError);
 }
