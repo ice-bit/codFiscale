@@ -12,22 +12,22 @@
   "author": "Marco Cetica",
   "license": "n/a",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
     "@types/body-parser": "^1.19.2",
     "@types/cheerio": "^0.22.31",
     "@types/express": "^4.17.13",
     "@types/node": "^18.7.9",
-    "@types/sqlite3": "^3.1.8",
     "fp-ts": "^2.12.2",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.2"
   },
   "dependencies": {
+    "better-sqlite3": "^7.6.2",
     "body-parser": "^1.20.0",
     "cheerio": "^1.0.0-rc.12",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
-    "express-validator": "^6.14.2",
-    "sqlite3": "^5.0.11"
+    "express-validator": "^6.14.2"
   }
 }

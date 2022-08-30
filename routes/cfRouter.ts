@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
 import { Either } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
-import { computeCF } from "../models/codFisc";
+import { getCF } from "../models/codFisc";
 import { IError } from "../types/error";
 import { Identity } from "../types/identity";
 
@@ -62,7 +62,7 @@ cfRouter.post("/",
 
     const identity: Identity = req.body;
     identity.codFiscale = "";
-    computeCF(identity).then(cfOption => {
+    getCF(identity).then(cfOption => {
         pipe(
             cfOption,
             match(
