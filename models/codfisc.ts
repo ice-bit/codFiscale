@@ -6,23 +6,23 @@ import { getCodCatastale } from "./codCatastale";
 import { getCodNazione } from "./codNazione";
 import { IError } from "../types/error";
 
-const getConsonants = (s: string): string => {
-    return Array.from(s.toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
+export const getConsonants = (s: string): string => {
+    return Array.from(s.split(/\s/).join('').toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
 }
 
-const getVowels = (s: string): string => {
-    return Array.from(s.toLowerCase()).filter(c => "aeiou".includes(c)).join('');
+export const getVowels = (s: string): string => {
+    return Array.from(s.split(/\s/).join('').toLowerCase()).filter(c => "aeiou".includes(c)).join('');
 }
 
-const getEven = (s: string): string[] => {
+export const getEven = (s: string): string[] => {
     return Array.from(s).filter((_, i) => (i + 1) % 2 == 0);
 }
 
-const getOdd = (s: string): string[] => {
+export const getOdd = (s: string): string[] => {
     return Array.from(s).filter((_, i) => (i + 1) % 2 != 0);
 }
 
-const getSurname = (identity: Identity): Identity => {
+export const getSurname = (identity: Identity): Identity => {
     // Estrai le prime tre consonanti del cognome
     const consonantiCognome: string = getConsonants(identity.surname);
     let codCognome: string = consonantiCognome.slice(0, 3);
@@ -43,7 +43,7 @@ const getSurname = (identity: Identity): Identity => {
     return identity;
 }
 
-const getName = (identity: Identity): Identity => {
+export const getName = (identity: Identity): Identity => {
     // Estrai le consonanti del nome
     const consonantiNome: string = getConsonants(identity.name);
     // Se le consonanti sono >= 4, estrai la prima, la terza e la quarta
@@ -74,13 +74,13 @@ const getName = (identity: Identity): Identity => {
     return identity;
 }
 
-const getBirthYear = (identity: Identity): Identity => {
+export const getBirthYear = (identity: Identity): Identity => {
     identity.codFiscale += identity.birthYear.slice(-2);
 
     return identity;
 }
 
-const getBirthMonth = (identity: Identity): Identity => {
+export const getBirthMonth = (identity: Identity): Identity => {
     type monthT = {
         [month: number]: string;
     }
@@ -106,7 +106,7 @@ const getBirthMonth = (identity: Identity): Identity => {
     return identity;
 }
 
-const getBirthDay = (identity: Identity): Identity => {
+export const getBirthDay = (identity: Identity): Identity => {
     let birthday: number = Number(identity.birthDay);
     // Se il soggetto e' una donna, sommare 40 al giorno di nascita
     if(identity.sex === "female") {
@@ -125,7 +125,7 @@ const getBirthDay = (identity: Identity): Identity => {
     return identity;
 }
 
-const getBirthPlace = async (identity: Identity): Promise<Identity> => {
+export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (fa: Option<A>) => {
         switch(fa._tag) {
             case "None": return onNone();
@@ -161,7 +161,7 @@ const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     return identity;
 }
 
-const getControlCode = async (identity: Promise<Identity>): Promise<Identity> => {
+export const getControlCode = async (identity: Promise<Identity>): Promise<Identity> => {
     (await identity).codFiscale = (await identity).codFiscale.toUpperCase();
     // Separa i caratteri in posizione dispari da quelli in posizione pari
     const oddChars: string[] = getOdd((await identity).codFiscale);
