@@ -14,6 +14,10 @@ cfRouter.get("/", (_: Request, res: Response) => {
     });
 });
 
+cfRouter.get("/about", (_: Request, res: Response) => {
+    res.render("pages/about");
+})
+
 cfRouter.post("/",
 [
     check("surname")

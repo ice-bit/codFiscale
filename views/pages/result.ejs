@@ -7,7 +7,7 @@
           <p class="cfIdentity card-subtitle text-muted">Cognome: <b><%= identity.surname %></b></p>
           <p class="cfIdentity card-subtitle text-muted">Nome: <b><%= identity.name %></b></p>
           <p class="cfIdentity card-subtitle text-muted">Sesso: <b>
-            <% if(identity.sex) { %>
+            <% if(identity.sex === "male") { %>
                 M
             <% } else { %>
                 F
