@@ -8,7 +8,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname + "/static")));
+app.use(express.static("static"));
 app.use("/", cfRouter);
 
 const PORT = <unknown>process.env.PORT as number;
