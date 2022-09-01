@@ -8,4 +8,4 @@ RUN npm install
 RUN npm run build
 # Start app
 EXPOSE 9000
-CMD ["node", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"]

@@ -1,6 +1,5 @@
 import * as codFisc from "../models/codFisc";
 import { Identity } from "../types/identity";
-import { pipe } from "fp-ts/lib/Function";
 
 describe("Testing codFisc.ts file", () => {
     test("getConsonants method should returns a string containing consonants only", () => {
@@ -264,18 +263,15 @@ describe("Testing codFisc.ts file", () => {
             codFiscale: ""
         };
 
-        const actualPromise = pipe(
-            identity,
-            codFisc.getSurname,
-            codFisc.getName,
-            codFisc.getBirthYear,
-            codFisc.getBirthMonth,
-            codFisc.getBirthDay,
-            codFisc.getBirthPlace,
-            codFisc.getControlCode
-        );
+        const surname = codFisc.getSurname(identity);
+        const name = codFisc.getName(surname);
+        const birthYear = codFisc.getBirthYear(name);
+        const birthMonth = codFisc.getBirthMonth(birthYear);
+        const birthDay = codFisc.getBirthDay(birthMonth);
+        const birthPlace = codFisc.getBirthPlace(birthDay);
+        const controlCode = codFisc.getControlCode(birthPlace);
 
-        actualPromise.then(actual => {
+        controlCode.then(actual => {
             expect(actual.codFiscale.slice(-1)).toBe("K");
         });
     });
@@ -293,18 +289,15 @@ describe("Testing codFisc.ts file", () => {
             codFiscale: ""
         };
 
-        const actualPromise = pipe(
-            identity,
-            codFisc.getSurname,
-            codFisc.getName,
-            codFisc.getBirthYear,
-            codFisc.getBirthMonth,
-            codFisc.getBirthDay,
-            codFisc.getBirthPlace,
-            codFisc.getControlCode
-        );
+        const surname = codFisc.getSurname(identity);
+        const name = codFisc.getName(surname);
+        const birthYear = codFisc.getBirthYear(name);
+        const birthMonth = codFisc.getBirthMonth(birthYear);
+        const birthDay = codFisc.getBirthDay(birthMonth);
+        const birthPlace = codFisc.getBirthPlace(birthDay);
+        const result = codFisc.getControlCode(birthPlace);
 
-        actualPromise.then(actual => {
+        result.then(actual => {
             expect(actual.codFiscale).toBe("RSSMRA77B04F205K");
         });
     });

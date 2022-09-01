@@ -10,7 +10,8 @@
             "env": {
                 "PORT": 9000,
                 "HOST": "0.0.0.0",
-                "NODE_ENV": "production"
+                "NODE_ENV": "production",
+                "NODE_NO_WARNINGS": 1
             }
         }
     ]
