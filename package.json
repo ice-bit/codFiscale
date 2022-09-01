@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "start": "tsc && node dist/server.js",
+    "build": "tsc && cp -R codnazioni.db dist",
+    "start": "tsc && cp -R codnazioni.db dist && node dist/server.js",
     "start:dev": "nodemon",
     "start:prod": "pm2 start process.json --no-daemon"
   },
