@@ -2,8 +2,8 @@ import { Identity } from "../types/identity";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
-import { getCodCatastale } from "./codCatastale";
-import { getCodNazione } from "./codNazione";
+import { getCodCatastale } from "./codcatastale";
+import { getCodNazione } from "./codnazione";
 import { IError } from "../types/error";
 
 export const getConsonants = (s: string): string => {

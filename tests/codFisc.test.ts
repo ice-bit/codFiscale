@@ -1,4 +1,4 @@
-import * as codFisc from "../models/codFisc";
+import * as codFisc from "../models/codfisc";
 import { Identity } from "../types/identity";
 
 describe("Testing codFisc.ts file", () => {

@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
 import { Either } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
-import { getCF } from "../models/codFisc";
+import { getCF } from "../models/codfisc";
 import { IError } from "../types/error";
 import { Identity } from "../types/identity";
 
