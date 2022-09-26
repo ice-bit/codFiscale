@@ -135,12 +135,14 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     }
 
     // FIXME: usare env var per url redis
-    const redisClient = redis.createClient({ url: "redis://127.0.0.1:6379" });
+    const REDIS_HOST = process.env.REDIS_HOST as string;
+    const REDIS_PORT = <unknown>process.env.REDIS_PORT as number;
+    const redisClient = redis.createClient({ url: `redis://${REDIS_HOST}:${REDIS_PORT}` });
     redisClient.on("error", (error) => console.log("error: " + error));
     await redisClient.connect();
 
     // Cerca codice catastale nella cache
-    const codCatastaleCache = await redisClient.get(identity.birthPlace);
+    const codCatastaleCache = await redisClient.get(identity.birthPlace.toUpperCase());
     if(codCatastaleCache) {
         identity.codFiscale += codCatastaleCache;
         redisClient.quit();
@@ -150,7 +152,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         const codCatastale: string = await getCodCatastale(identity.birthPlace);
         // Se il codice catastale esiste, salvalo nella cache
         if(codCatastale)
-            await redisClient.set(identity.birthPlace, codCatastale);
+            await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
         else {
             // Se il codice catastale e' nullo, prova a cercare il codice della nazione
             const codNazione: Option<string> = getCodNazione(identity.birthPlace);
