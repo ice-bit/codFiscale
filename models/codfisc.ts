@@ -5,6 +5,7 @@ import { pipe } from "fp-ts/lib/function";
 import { getCodCatastale } from "./codcatastale";
 import { getCodNazione } from "./codnazione";
 import { IError } from "../types/error";
+import * as redis from "redis";
 
 export const getConsonants = (s: string): string => {
     return Array.from(s.split(/\s/).join('').toLowerCase()).filter(c => !"aeiou".includes(c)).join('');
@@ -133,32 +134,49 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         }
     }
 
-    // Estrai il codice catastale in base al comune
-    const codCatastale: string = await getCodCatastale(identity.birthPlace);
-    if(!codCatastale) {
-        // Se il codice catastale e' nullo, prova a cercare il codice della nazione
-        const codNazione: Option<string> = getCodNazione(identity.birthPlace);
-        pipe(
-            codNazione,
-            match(
-                () => {
-                    const error: IError = {
-                        code: 400,
-                        msg: "Il luogo di nascita selezionato non esiste"
-                    };
-                    identity.errors = error;
-                    return identity;
-                },
-                (codNazione: string) => {
-                    identity.codFiscale += codNazione;
-                    return identity;
-                }
-            )
-        );
-    }
+    // FIXME: usare env var per url redis
+    const redisClient = redis.createClient({ url: "redis://127.0.0.1:6379" });
+    redisClient.on("error", (error) => console.log("error: " + error));
+    await redisClient.connect();
 
-    identity.codFiscale += codCatastale;
-    return identity;
+    // Cerca codice catastale nella cache
+    const codCatastaleCache = await redisClient.get(identity.birthPlace);
+    if(codCatastaleCache) {
+        identity.codFiscale += codCatastaleCache;
+        redisClient.quit();
+        return identity;
+    } else {
+        // Altrimenti estrailo attraverso l'API
+        const codCatastale: string = await getCodCatastale(identity.birthPlace);
+        // Se il codice catastale esiste, salvalo nella cache
+        if(codCatastale)
+            await redisClient.set(identity.birthPlace, codCatastale);
+        else {
+            // Se il codice catastale e' nullo, prova a cercare il codice della nazione
+            const codNazione: Option<string> = getCodNazione(identity.birthPlace);
+            pipe(
+                codNazione,
+                match(
+                    () => {
+                        const error: IError = {
+                            code: 400,
+                            msg: "Il luogo di nascita selezionato non esiste"
+                        };
+                        identity.errors = error;
+                        return identity;
+                    },
+                    (codNazione: string) => {
+                        identity.codFiscale += codNazione;
+                        return identity;
+                    }
+                )
+            );
+        }
+
+        identity.codFiscale += codCatastale;
+        redisClient.quit();
+        return identity;
+    }
 }
 
 export const getControlCode = async (identity: Promise<Identity>): Promise<Identity> => {
