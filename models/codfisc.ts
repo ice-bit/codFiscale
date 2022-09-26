@@ -134,7 +134,6 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         }
     }
 
-    // FIXME: usare env var per url redis
     const REDIS_HOST = process.env.REDIS_HOST as string;
     const REDIS_PORT = <unknown>process.env.REDIS_PORT as number;
     const redisClient = redis.createClient({ url: `redis://${REDIS_HOST}:${REDIS_PORT}` });
