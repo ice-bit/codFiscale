@@ -5,7 +5,6 @@ WORKDIR /app
 # Copy files and install deps
 COPY . .
 RUN npm install
-RUN npm run test
 RUN npm run build
 # Start app
 EXPOSE 9000

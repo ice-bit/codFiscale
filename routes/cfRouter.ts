@@ -57,6 +57,10 @@ cfRouter.post("/",
         }
     }
 
+    const normalizeField = (s: string): string => {
+        return s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase();
+    }
+
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.render("pages/index", { 
@@ -66,6 +70,11 @@ cfRouter.post("/",
 
     const identity: Identity = req.body;
     identity.codFiscale = "";
+    // Normalizza i campi dell'identita'
+    identity.name = normalizeField(identity.name);
+    identity.surname = normalizeField(identity.surname);
+    identity.birthPlace = normalizeField(identity.birthPlace);
+
     getCF(identity).then(cfOption => {
         pipe(
             cfOption,
