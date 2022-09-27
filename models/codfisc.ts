@@ -155,11 +155,11 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
             identity.codFiscale += codCatastale;
         } else {
             // Se il codice catastale e' nullo, prova a cercare il codice della nazione
-            const codNazione: Option<string> = getCodNazione(identity.birthPlace);
-            pipe(
-                codNazione,
+            const codNazioneOpt: Option<string> = getCodNazione(identity.birthPlace);
+            const codNazione: void | string = pipe(
+                codNazioneOpt,
                 match(
-                    (): void  => {
+                    (): void => {
                         // Se nemmeno il codice della nazione esiste, ritorna un errore
                         const error: IError = {
                             code: 400,
@@ -167,13 +167,16 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
                         };
                         identity.errors = error;
                     },
-                    async (codNazione: string): Promise<void> => {
-                        // Se il codice della nazione esiste, salvalo nella cache
-                        await redisClient.set(identity.birthPlace.toUpperCase(), codNazione);
+                    (codNazione: string): string => {
                         identity.codFiscale += codNazione;
+                        return codNazione;
                     }
                 )
             );
+
+            // Se il codice della nazione esiste, salvalo nella cache
+            if(typeof codNazione === "string")
+                await redisClient.set(identity.birthPlace.toUpperCase(), codNazione);
         }
 
         redisClient.quit();
