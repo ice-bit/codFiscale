@@ -159,7 +159,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
             pipe(
                 codNazione,
                 match(
-                    () => {
+                    (): void  => {
                         // Se nemmeno il codice della nazione esiste, ritorna un errore
                         const error: IError = {
                             code: 400,
@@ -167,7 +167,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
                         };
                         identity.errors = error;
                     },
-                    async (codNazione: string) => {
+                    async (codNazione: string): Promise<void> => {
                         // Se il codice della nazione esiste, salvalo nella cache
                         await redisClient.set(identity.birthPlace.toUpperCase(), codNazione);
                         identity.codFiscale += codNazione;

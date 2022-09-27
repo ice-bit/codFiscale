@@ -79,12 +79,12 @@ cfRouter.post("/",
         pipe(
             cfOption,
             match(
-                (error: IError) => {
+                (error: IError): void => {
                     res.render("pages/index", {
                         errorMessages: [error]
                     });
                 },
-                (identity: Identity) => {
+                (identity: Identity): void => {
                     res.render("pages/result", {
                         identity: identity
                     });    
