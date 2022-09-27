@@ -140,41 +140,42 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     redisClient.on("error", (error) => console.log(error));
     await redisClient.connect();
 
-    // Cerca codice catastale nella cache
-    const codCatastaleCache = await redisClient.get(identity.birthPlace.toUpperCase());
-    if(codCatastaleCache) {
-        identity.codFiscale += codCatastaleCache;
+    // Cerca il codice del luogo di nascita nella cache
+    const birthPlaceCode = await redisClient.get(identity.birthPlace.toUpperCase());
+    if(birthPlaceCode) {
+        identity.codFiscale += birthPlaceCode;
         redisClient.quit();
         return identity;
     } else {
         // Altrimenti estrailo attraverso l'API
         const codCatastale: string = await getCodCatastale(identity.birthPlace);
         // Se il codice catastale esiste, salvalo nella cache
-        if(codCatastale)
+        if(codCatastale) {
             await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
-        else {
+            identity.codFiscale += codCatastale;
+        } else {
             // Se il codice catastale e' nullo, prova a cercare il codice della nazione
             const codNazione: Option<string> = getCodNazione(identity.birthPlace);
             pipe(
                 codNazione,
                 match(
                     () => {
+                        // Se nemmeno il codice della nazione esiste, ritorna un errore
                         const error: IError = {
                             code: 400,
                             msg: "Il luogo di nascita selezionato non esiste"
                         };
                         identity.errors = error;
-                        return identity;
                     },
-                    (codNazione: string) => {
+                    async (codNazione: string) => {
+                        // Se il codice della nazione esiste, salvalo nella cache
+                        await redisClient.set(identity.birthPlace.toUpperCase(), codNazione);
                         identity.codFiscale += codNazione;
-                        return identity;
                     }
                 )
             );
         }
 
-        identity.codFiscale += codCatastale;
         redisClient.quit();
         return identity;
     }
