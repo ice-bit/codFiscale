@@ -1,6 +1,5 @@
 import express from "express";
 import * as bodyParser from "body-parser";
-import path from "path";
 import { cfRouter } from "./routes/cfRouter";
 
 const app = express();

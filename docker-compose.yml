@@ -1,0 +1,40 @@
+version: "3.9"
+
+networks:
+  codFisc:
+    external: false
+
+services:
+  codfisc-base:
+    container_name: "codfisc-base"
+    build:
+      context: .
+    environment:
+      HOST: 0.0.0.0
+      PORT: 9000 # Trim this value according to your configuration
+      REDIS_HOST: codfisc-cache
+      REDIS_PORT: 6380
+    networks:
+      - codFisc
+    ports:
+      - "9000:9000"
+    restart: always
+    depends_on:
+      - codfisc-cache
+
+  codfisc-cache:
+    image: redis:latest
+    container_name: "codfisc-cache"
+    command: --port 6380
+    restart: always
+    networks:
+      - codFisc
+    ports:
+      - "6380:6380"
+    expose:
+      - "6380"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 3s
+      retries: 30

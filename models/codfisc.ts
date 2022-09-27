@@ -137,7 +137,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     const REDIS_HOST = process.env.REDIS_HOST as string;
     const REDIS_PORT = <unknown>process.env.REDIS_PORT as number;
     const redisClient = redis.createClient({ url: `redis://${REDIS_HOST}:${REDIS_PORT}` });
-    redisClient.on("error", (error) => console.log("error: " + error));
+    redisClient.on("error", (error) => console.log(error));
     await redisClient.connect();
 
     // Cerca codice catastale nella cache

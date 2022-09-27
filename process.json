@@ -8,10 +8,7 @@
             "instances": 1,
             "max_memory_restart": "200M",
             "env": {
-                "PORT": 9000,
-                "HOST": "0.0.0.0",
-                "NODE_ENV": "production",
-                "NODE_NO_WARNINGS": 1
+                "NODE_ENV": "production"
             }
         }
     ]
