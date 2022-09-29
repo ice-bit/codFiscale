@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+    <body class="text-justify">
+        <main role="main" class="cfForm w-100 m-auto">
+            <form method="POST" action="/reverse">
+                <h1 id="cfTitle" class="mt-5 text-center">Calcolo Inverso</h1>
+                    <% if(errorMessages) {%>
+                        <div style="text-align: left;">
+                            <% errorMessages.forEach((error) => { %>
+                                <p class="lead"><b>Errore</b>: <%= error.msg %></p>
+                            <% }) %>
+                        </div>
+                    <% } %>
+                <div class="row g-3">
+                    <div class="col form-floating">
+                        <input type="text" name="codFisc" class="form-control" id="codFiscInput" placeholder="Inserisci il codice fiscale" required>
+                        <label for="codFiscInput" class="text-center">Codice Fiscale</label>
+                    </div>
+                </div>
+                <button class="w-100 btn btn-lg btn-dark" type="submit">Estrai Informazioni</button>
+            </form>
+        </main>
+
+        <%- include('../partials/footer') %>
+        <script src="/js/initDate.js"></script>
+    </body>
+</html>

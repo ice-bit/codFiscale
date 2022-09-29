@@ -14,6 +14,29 @@ cfRouter.get("/", (_: Request, res: Response) => {
     });
 });
 
+cfRouter.get("/reverse", (_: Request, res: Response) => {
+    res.render("pages/reverse", {
+        errorMessages: undefined
+    });
+});
+
+cfRouter.post("/reverse",
+[
+    check("codFisc")
+        .not()
+        .isEmpty()
+        .withMessage("Inserisci il codice fiscale")
+],
+(req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        return res.render("pages/reverse", {
+            errorMessages: errors.array()
+        });
+    }
+});
+
 cfRouter.get("/about", (_: Request, res: Response) => {
     res.render("pages/about");
 })
