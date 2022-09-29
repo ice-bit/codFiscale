@@ -1,62 +1,64 @@
 <%- include('../partials/header') %>
-<body class="text-justify">
-    <main role="main" class="container">
-        <h1 class="mt-5">Informazioni su questo sito</h1>
-        <p class="lead">
-            Questo sito permette di calcolare in maniera totalmente gratuita il proprio codice fiscale. Tale codice viene utilizzato 
-            da vari apparati della pubblica amministrazione per identificare in maniera univoca ogni cittadino Italiano. 
-            Il codice fiscale puo' essere generato seguendo una procedura regolamentata dal 
-            <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1973-09-29;605!vig=">
-                DPR n.605 del 29 settembre 1973</a>
-            definita, a grandi linee, nel seguente modo:
+<%- include('../partials/navbar') %>
+    <body class="text-justify">
+        <main role="main" class="container">
+            <h1 class="mt-5">Informazioni su questo sito</h1>
+            <p class="lead">
+                Questo sito permette di calcolare in maniera totalmente gratuita il proprio codice fiscale. Tale codice viene utilizzato
+                da vari apparati della pubblica amministrazione per identificare in maniera univoca ogni cittadino Italiano.
+                Il codice fiscale puo' essere generato seguendo una procedura regolamentata dal
+                <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1973-09-29;605!vig=">
+                    DPR n.605 del 29 settembre 1973</a>
+                definita, a grandi linee, nel seguente modo:
 
-            <ol>
-                <li>I primi tre caratteri del codice fiscale sono costituiti dalle prime tre consonanti(prese in ordine) che 
-                    compongono il cognome. Se il cognome non dovesse avere sufficienti consonanti, si estraggono pure le vocali,
-                    concatenandole comunque dopo le consonanti. Nel caso in cui il cognome fosse composto da meno di tre caratteri,
-                    si aggiunge una 'X' al risultato finale.
-                </li>
-                <li>
-                    I successivi tre caratteri del codice fiscale sono estratti dal nome. Se il nome contiene quattro o piu'
-                    consonanti, si scelgono la prima, la terza e la quarta consonante. In caso contrario, si prendono le prime tre 
-                    consonanti nell'ordine in cui appaiono. Se il nome non ha sufficienti consonanti, si possono estrarre pure le 
-                    vocali, concatenandole comunque dopo le consonanti. Nel caso in cui il nome fosse composto da meno di tre 
-                    caratteri, si aggiunge una 'X' al risultato finale.
-                </li>
-                <li>
-                    I successivi tre caratteri vengono presi dalle ultime due cifre dell'anno di nascita(primi due caratteri) e 
-                    dal carattere corrispondente del mese di nascita(ultimo carattere). Per conoscere come viene associato 
-                    ciascun mese, si faccia riferimento al <a href="https://it.wikipedia.org/wiki/Codice_fiscale">seguente documento</a>.
-                </li>
-                <li>
-                    I successive due caratteri vengono calcolati utilizzando il giorno di nascita e il sesso. 
-                    Per i soggetti di sesso maschile e' sufficiente prendere le prime due cifre del giorno di nascita(ricordando 
-                    di anteporre la cifra '0' se il giorno e' compreso tra 1 e 9), mentre per i soggetti di sesso femminile, 
-                    si deve aggiungere il numero '40' al giorno di nascita.
-                </li>
-                <li>
-                    I successivi quattro caratteri alfanumerici sono calcolati in base al luogo di nascita. Se il soggetto 
-                    e' residente in territorio Italiano, si utilizza il codice catastale, mentre per i cittadini stranieri ma 
-                    residenti in Italia, si utilizza il codice identificatore dello stato(ricordando di anteporre la lettera
-                    'Z' al risultato finale).
-                </li>
-                <li>
-                    L'ultima cifra e' costituita dal carattere di controllo. Il procedimento del calcolo del carattere 
-                    di controllo e' spiegato in maniera esaustiva nel <a href="https://it.wikipedia.org/wiki/Codice_fiscale#Anno%20emesedinascita">
-                        seguente documento
-                    </a>.
-                </li>
-            </ol>
+                <ol>
+                    <li>I primi tre caratteri del codice fiscale sono costituiti dalle prime tre consonanti(prese in ordine) che
+                        compongono il cognome. Se il cognome non dovesse avere sufficienti consonanti, si estraggono pure le vocali,
+                        concatenandole comunque dopo le consonanti. Nel caso in cui il cognome fosse composto da meno di tre caratteri,
+                        si aggiunge una 'X' al risultato finale.
+                    </li>
+                    <li>
+                        I successivi tre caratteri del codice fiscale sono estratti dal nome. Se il nome contiene quattro o piu'
+                        consonanti, si scelgono la prima, la terza e la quarta consonante. In caso contrario, si prendono le prime tre
+                        consonanti nell'ordine in cui appaiono. Se il nome non ha sufficienti consonanti, si possono estrarre pure le
+                        vocali, concatenandole comunque dopo le consonanti. Nel caso in cui il nome fosse composto da meno di tre
+                        caratteri, si aggiunge una 'X' al risultato finale.
+                    </li>
+                    <li>
+                        I successivi tre caratteri vengono presi dalle ultime due cifre dell'anno di nascita(primi due caratteri) e
+                        dal carattere corrispondente del mese di nascita(ultimo carattere). Per conoscere come viene associato
+                        ciascun mese, si faccia riferimento al <a href="https://it.wikipedia.org/wiki/Codice_fiscale">seguente documento</a>.
+                    </li>
+                    <li>
+                        I successive due caratteri vengono calcolati utilizzando il giorno di nascita e il sesso.
+                        Per i soggetti di sesso maschile e' sufficiente prendere le prime due cifre del giorno di nascita(ricordando
+                        di anteporre la cifra '0' se il giorno e' compreso tra 1 e 9), mentre per i soggetti di sesso femminile,
+                        si deve aggiungere il numero '40' al giorno di nascita.
+                    </li>
+                    <li>
+                        I successivi quattro caratteri alfanumerici sono calcolati in base al luogo di nascita. Se il soggetto
+                        e' residente in territorio Italiano, si utilizza il codice catastale, mentre per i cittadini stranieri ma
+                        residenti in Italia, si utilizza il codice identificatore dello stato(ricordando di anteporre la lettera
+                        'Z' al risultato finale).
+                    </li>
+                    <li>
+                        L'ultima cifra e' costituita dal carattere di controllo. Il procedimento del calcolo del carattere
+                        di controllo e' spiegato in maniera esaustiva nel <a href="https://it.wikipedia.org/wiki/Codice_fiscale#Anno%20emesedinascita">
+                            seguente documento
+                        </a>.
+                    </li>
+                </ol>
 
-            Poiche' il procedimento per la risoluzione di conflitti dei codici fiscali tra soggetti legali diversi 
-            e' nota solo alla Agenzia delle Entrate, il codice generato da questo sito <b>non tiene conto delle omocodie</b>, pertanto due soggetti con parametri
-            identici avranno il medesimo codice fiscale. Lo strumento messo a disposizione su questo sito ha, percio', un valore 
-            puramente indicativo e non puo' in alcun modo sostituire il codice fiscale emesso dagli organi dell'anagrafe Italiana.
-        </p>
+                Poiche' il procedimento per la risoluzione di conflitti dei codici fiscali tra soggetti legali diversi
+                e' nota solo alla Agenzia delle Entrate, il codice generato da questo sito <b>non tiene conto delle omocodie</b>, pertanto due soggetti con parametri
+                identici avranno il medesimo codice fiscale. Lo strumento messo a disposizione su questo sito ha, percio', un valore
+                puramente indicativo e non puo' in alcun modo sostituire il codice fiscale emesso dagli organi dell'anagrafe Italiana.
+            </p>
 
-        Per calcolare un nuovo codice fiscale, <a href="/">clicca qui</a>.
+            Per calcolare un nuovo codice fiscale, <a href="/">clicca qui</a>.
 
 
-    </main>
-    <%- include('../partials/footer') %>
-</body>
+        </main>
+        <%- include('../partials/footer') %>
+    </body>
+</html>

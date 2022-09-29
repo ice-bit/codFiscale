@@ -12,9 +12,6 @@ body {
     padding-bottom: 40px;
 }
 
-a, a:visited, a:hover {
-    color: inherit;
-}
 
 /* IDs */
 #cfTitle {
@@ -54,4 +51,8 @@ a, a:visited, a:hover {
 
 .cfIdentity {
     font-size: 17px;
+}
+
+main > .container {
+    padding: 60px 15px 0;
 }

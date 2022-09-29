@@ -1,25 +1,28 @@
 <%- include('../partials/header') %>
-<body class="justify-content-center">
-    <% if(identity) {%>
-    <div class="mx-auto card" style="width: 600px;">
-        <div class="card-body">
-          <h1 id="codFiscale" class="text-center card-title"><code><%= identity.codFiscale %></code></h1>
-          <p class="cfIdentity card-subtitle text-muted">Cognome: <b><%= identity.surname %></b></p>
-          <p class="cfIdentity card-subtitle text-muted">Nome: <b><%= identity.name %></b></p>
-          <p class="cfIdentity card-subtitle text-muted">Sesso: <b>
-            <% if(identity.sex === "male") { %>
-                M
-            <% } else { %>
-                F
-            <% } %>
-          </b></p>
-          <p class="cfIdentity card-subtitle text-muted">Luogo Di Nascita: <b><%= identity.birthPlace %></b></p>
-          <p class="cfIdentity card-subtitle text-muted">Data Di Nascita: <b><%= identity.birthDay %></b>/<b><%= identity.birthMonth %></b>/<b><%= identity.birthYear %></b></p>
-          <p class="cfIdentity card-subtitle text-muted">Codice Fiscale: <b><%= identity.codFiscale %></b></p>
+<%- include('../partials/navbar') %>
+<body class="text-justify">
+    <main role="main" class="cfForm w-100 m-auto" style="padding-top: 80px;">
+        <% if(identity) {%>
+        <h1 id="codFiscale" class="text-center card-title"><code><%= identity.codFiscale %></code></h1>
+        <div class="mx-auto card" style="padding-top: 30px;">
+            <div class="card-body">
+            <p class="cfIdentity card-subtitle text-muted">Cognome: <b><%= identity.surname %></b></p>
+            <p class="cfIdentity card-subtitle text-muted">Nome: <b><%= identity.name %></b></p>
+            <p class="cfIdentity card-subtitle text-muted">Sesso: <b>
+                <% if(identity.sex === "male") { %>
+                    M
+                <% } else { %>
+                    F
+                <% } %>
+            </b></p>
+            <p class="cfIdentity card-subtitle text-muted">Luogo Di Nascita: <b><%= identity.birthPlace %></b></p>
+            <p class="cfIdentity card-subtitle text-muted">Data Di Nascita: <b><%= identity.birthDay %></b>/<b><%= identity.birthMonth %></b>/<b><%= identity.birthYear %></b></p>
+            <p class="cfIdentity card-subtitle text-muted">Codice Fiscale: <b><%= identity.codFiscale %></b></p>
+            </div>
+            <button class="w-80 btn btn-lg btn-dark" type="button" onclick="location.href='/';">Calcola un nuovo codice</button>
         </div>
-        <button class="w-80 btn btn-lg btn-primary" type="button" onclick="location.href='/';">Calcola un nuovo codice</button>
-      </div>
-      <% } %>
+        <% } %>
+    </main>
       
     <%- include('../partials/footer') %>
 </body>
