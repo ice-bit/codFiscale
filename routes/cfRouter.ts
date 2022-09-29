@@ -3,10 +3,18 @@ import { check, validationResult } from "express-validator";
 import { Either } from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/function";
 import { getCF } from "../models/codfisc";
+import { reverseCF } from "../models/reverse";
 import { IError } from "../types/error";
 import { Identity } from "../types/identity";
 
 export const cfRouter = express.Router();
+
+const match = <E, R, A>(onLeft: (left: E) => R, onRight: (right: A) => R) => (fa: Either<E, A>): R => {
+    switch(fa._tag) {
+        case "Left": return onLeft(fa.left);
+        case "Right": return onRight(fa.right);
+    }
+}
 
 cfRouter.get("/", (_: Request, res: Response) => {
     res.render("pages/index", { 
@@ -22,19 +30,38 @@ cfRouter.get("/reverse", (_: Request, res: Response) => {
 
 cfRouter.post("/reverse",
 [
-    check("codFisc")
+    check("codFiscale")
         .not()
         .isEmpty()
         .withMessage("Inserisci il codice fiscale")
 ],
 (req: Request, res: Response) => {
     const errors = validationResult(req);
+    const identity: Identity = req.body;
 
     if(!errors.isEmpty()) {
         return res.render("pages/reverse", {
             errorMessages: errors.array()
         });
     }
+
+
+    pipe(
+        identity,
+        reverseCF,
+        match(
+            (error: IError): void => {
+                res.render("pages/reverse", {
+                    errorMessages: [error]
+                });
+            },
+            (identity: Identity): void => {
+                res.render("pages/result", {
+                    identity: identity
+                });
+            }
+        )
+    );
 });
 
 cfRouter.get("/about", (_: Request, res: Response) => {
@@ -68,18 +95,11 @@ cfRouter.post("/",
         .isEmpty()
         .withMessage("Inserire il mese di nascita"),
     check("birthYear")
-        .not()
+    .not()
         .isEmpty()
         .withMessage("Inserire l'anno di nascita"),
 ],
 (req: Request, res: Response) => {
-    const match = <E, R, A>(onLeft: (left: E) => R, onRight: (right: A) => R) => (fa: Either<E, A>): R => {
-        switch(fa._tag) {
-            case "Left": return onLeft(fa.left);
-            case "Right": return onRight(fa.right);
-        }
-    }
-
     const normalizeField = (s: string): string => {
         return s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase();
     }
