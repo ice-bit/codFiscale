@@ -45,6 +45,8 @@ cfRouter.post("/reverse",
         });
     }
 
+    // Rimuovi eventuali spazi bianchi dalla stringa
+    identity.codFiscale = identity.codFiscale.trim();
 
     pipe(
         identity,
