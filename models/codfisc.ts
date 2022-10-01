@@ -2,7 +2,7 @@ import { Identity } from "../types/identity";
 import { Either, left, right } from "fp-ts/lib/Either";
 import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
-import { getCodCatastale } from "./codcatastale";
+import { getComune, opType } from "./codcatastale";
 import { getCodNazione } from "./codnazione";
 import { IError } from "../types/error";
 import * as redis from "redis";
@@ -148,7 +148,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         return identity;
     } else {
         // Altrimenti estrailo attraverso l'API
-        const codCatastale: string = await getCodCatastale(identity.birthPlace);
+        const codCatastale: string = await getComune(identity.birthPlace, opType.getCodCatastale);
         // Se il codice catastale esiste, salvalo nella cache
         if(codCatastale) {
             await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);

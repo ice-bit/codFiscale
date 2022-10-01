@@ -4,7 +4,14 @@ import path from "path";
 
 export const getCodNazione = (birthPlace: string): Option<string> => {
     const db = new Database(path.join(__dirname +  "/../codnazioni.db"));
-    const row = db.prepare("SELECT Code FROM codNazioni Where UPPER(City) = ?").get(birthPlace.toUpperCase());
+    const row = db.prepare("SELECT Code FROM codNazioni WHERE UPPER(City) = ?").get(birthPlace.toUpperCase());
 
     return row === undefined ? none : some(row.Code);
+}
+
+export const getNazione = (codNazione: string): Option<string> => {
+    const db = new Database(path.join(__dirname + "/../codnazioni.db"));
+    const row = db.prepare("SELECT City FROM codNazioni WHERE Code = ?").get(codNazione);
+
+    return row === undefined ? none : some(row.City);
 }
