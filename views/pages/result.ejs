@@ -16,7 +16,7 @@
                 <% } %>
             </b></p>
             <p class="cfIdentity card-subtitle text-muted">Luogo Di Nascita: <b><%= identity.birthPlace %></b></p>
-            <p class="cfIdentity card-subtitle text-muted">Data Di Nascita: <b><%= identity.birthDay %></b>/<b><%= identity.birthMonth %></b>/<b><%= identity.birthYear %></b></p>
+            <p class="cfIdentity card-subtitle text-muted">Data Di Nascita: <b><%= identity.birthDay %></b> <b id="month"><%= identity.birthMonth %></b> <b><%= identity.birthYear %></b></p>
             <p class="cfIdentity card-subtitle text-muted">Codice Fiscale: <b><%= identity.codFiscale %></b></p>
             </div>
             <% if(reverse) {%>
@@ -29,5 +29,6 @@
     </main>
       
     <%- include('../partials/footer') %>
+    <script src="/js/mapMonths.js"></script>
 </body>
 </html>

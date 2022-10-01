@@ -6,7 +6,7 @@ import { IError } from "../types/error";
 import { getNazione } from "./codnazione";
 import { getComune, opType } from "./codcatastale";
 
-const getSurname = (identity: Identity): Identity => {
+export const getSurname = (identity: Identity): Identity => {
     const surname: string = identity.codFiscale.slice(0, 3);
 
     identity.surname = surname;
@@ -14,7 +14,7 @@ const getSurname = (identity: Identity): Identity => {
     return identity;
 }
 
-const getName = (identity: Identity): Identity => {
+export const getName = (identity: Identity): Identity => {
     const name: string = identity.codFiscale.slice(3, 6);
 
     identity.name = name;
@@ -22,7 +22,7 @@ const getName = (identity: Identity): Identity => {
     return identity;
 }
 
-const getBirthYear = (identity: Identity): Identity => {
+export const getBirthYear = (identity: Identity): Identity => {
     const birthYear: string = identity.codFiscale.slice(6, 8);
     const currentYear: number = new Date().getFullYear();
 
@@ -39,7 +39,7 @@ const getBirthYear = (identity: Identity): Identity => {
     return identity;
 }
 
-const getBirthMonth = (identity: Identity): Identity => {
+export const getBirthMonth = (identity: Identity): Identity => {
     type monthT = {
         [value: string]: number;
     }
@@ -64,20 +64,27 @@ const getBirthMonth = (identity: Identity): Identity => {
     return identity;
 }
 
-const getBirthDay = (identity: Identity): Identity => {
+export const getBirthDay = (identity: Identity): Identity => {
     const birthDay: number = Number(identity.codFiscale.slice(9, 11));
     // Se il giorno di nascita e' '41' e '71', si tratta
     // di un soggetto di sesso femminile. Dunque si sottrae
     // '40' dal risultato finale
     if(birthDay >= 41 && birthDay <= 71)
         identity.birthDay = (birthDay - 40);
-    else
+    else if(birthDay >= 1 && birthDay <= 31)
         identity.birthDay = birthDay;
+    else {
+        const error: IError = {
+            code: 400,
+            msg: "Il giorno di nascita del codice fiscale risulta invalido"
+        };
+        identity.errors = error;
+    }
 
     return identity;
 }
 
-const getBirthPlace = async (identity: Identity): Promise<Identity> => {
+export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (fa: Option<A>) => {
         switch(fa._tag) {
             case "None": return onNone();
