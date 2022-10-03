@@ -8,11 +8,10 @@ def gen_header_comment():
             f" * {datetime.date(datetime.now())}:{datetime.time(datetime.now())}\n" \
             " * Non modificare */\n"
 
-
 def gen_create_query(tab_name, city_field, code_field):
     return f"CREATE TABLE {tab_name} (\n" \
-            f"    {city_field} VARCHAR(64) NOT NULL,\n" \
-            f"    {code_field} VARCHAR(4) NOT NULL PRIMARY KEY\n);\n\n"
+           f"    {city_field} VARCHAR(64) NOT NULL,\n" \
+           f"    {code_field} VARCHAR(4) NOT NULL PRIMARY KEY\n);\n\n"
 
 def gen_insert_query(row, tab_name, city_field, code_field):
     return f"INSERT INTO {tab_name}({city_field},{code_field}) VALUES (\"{row[6]}\",\"{row[9]}\");\n"
