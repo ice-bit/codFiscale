@@ -105,7 +105,8 @@ cfRouter.post("/",
 ],
 (req: Request, res: Response) => {
     const normalizeField = (s: string): string => {
-        return s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase();
+        return s.trim().slice(0, 1).toUpperCase() +
+               s.trim().split(/\s/).join('').slice(1).toLowerCase();
     }
 
     const errors = validationResult(req);

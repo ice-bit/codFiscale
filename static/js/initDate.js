@@ -26,7 +26,7 @@
     // Add months of the year to select form
     Array(13).fill(0).map((_, i) => i).slice(2).forEach(month => {
         const newOption = document.createElement("option");
-        newOption.text = month.toString();
+        newOption.value = month.toString();
         newOption.label = monthMap[month];
         monthSelect.add(newOption);
     });

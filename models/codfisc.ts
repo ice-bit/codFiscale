@@ -151,7 +151,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         const codCatastale: string = await getComune(identity.birthPlace, opType.getCodCatastale);
         // Se il codice catastale esiste, salvalo nella cache
         if(codCatastale) {
-            await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
+            await redisClient.set(identity.birthPlace.trim().toUpperCase(), codCatastale);
             identity.codFiscale += codCatastale;
         } else {
             // Se il codice catastale e' nullo, prova a cercare il codice della nazione
