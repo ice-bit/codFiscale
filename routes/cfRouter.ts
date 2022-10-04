@@ -46,7 +46,7 @@ cfRouter.post("/reverse",
     }
 
     // Rimuovi eventuali spazi bianchi dalla stringa
-    identity.codFiscale = identity.codFiscale.trim();
+    identity.codFiscale = identity.codFiscale.trim().toUpperCase();
 
     const resOpt: Either<IError, Identity> =  reverseCF(identity);
     pipe(

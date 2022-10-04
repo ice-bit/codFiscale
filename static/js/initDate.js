@@ -28,6 +28,7 @@
         const newOption = document.createElement("option");
         newOption.value = month.toString();
         newOption.label = monthMap[month];
+        newOption.text = monthMap[month];
         monthSelect.add(newOption);
     });
 
