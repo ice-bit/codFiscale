@@ -48,24 +48,23 @@ cfRouter.post("/reverse",
     // Rimuovi eventuali spazi bianchi dalla stringa
     identity.codFiscale = identity.codFiscale.trim();
 
-    reverseCF(identity).then(resOption => {
-        pipe(
-            resOption,
-            match(
-                (error: IError): void => {
-                    res.render("pages/reverse", {
-                        errorMessages: [error]
-                    });
-                },
-                (identity: Identity): void => {
-                    res.render("pages/result", {
-                        identity: identity,
-                        reverse: true,
-                    });
-                }
-            )
+    const resOpt: Either<IError, Identity> =  reverseCF(identity);
+    pipe(
+        resOpt,
+        match(
+            (error: IError): void => {
+                res.render("pages/reverse", {
+                    errorMessages: [error]
+                });
+            },
+            (identity: Identity): void => {
+                res.render("pages/result", {
+                    identity: identity,
+                    reverse: true,
+                });
+            }
         )
-    });
+    );
 });
 
 cfRouter.get("/about", (_: Request, res: Response) => {

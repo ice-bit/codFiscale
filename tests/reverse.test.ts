@@ -101,9 +101,8 @@ describe("Testing reverse.ts file", () => {
             codFiscale: "RSSMRA85A47H501Z"
         };
 
-        reverse.getBirthPlace(identity).then(actual => {
-            expect(actual.birthPlace).toBe("Roma")
-        });
+        const actual = reverse.getBirthPlace(identity);
+        expect(actual.birthPlace).toBe("Roma");
     });
 
     test("getBirthSex method should returns the sex", () => {

@@ -3,8 +3,7 @@ import { Either, left, right } from "fp-ts/lib/Either";
 import { Option } from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
 import { IError } from "../types/error";
-import { getNazione } from "./codnazione";
-import { getComune, opType } from "./codcatastale";
+import { getComune, getNazione } from "./codes";
 
 export const getSurname = (identity: Identity): Identity => {
     const surname: string = identity.codFiscale.slice(0, 3);
@@ -84,7 +83,7 @@ export const getBirthDay = (identity: Identity): Identity => {
     return identity;
 }
 
-export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
+export const getBirthPlace = (identity: Identity): Identity => {
     const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (fa: Option<A>) => {
         switch(fa._tag) {
             case "None": return onNone();
@@ -96,8 +95,11 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         return s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase();
     }
 
+    // Estrai i caratteri del luogo di nascita dal codice fiscale
     const codBirthPlace: string = identity.codFiscale.slice(11, 15);
 
+    // Se il codice del luogo di nascita inizia con 'Z', cerca nella
+    // tabella dei codici nazionali
     if(codBirthPlace[0] === 'Z') {
         const nazioneOpt: Option<string> = getNazione(codBirthPlace);
         pipe(
@@ -106,7 +108,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
                 (): void => {
                     const error: IError = {
                         code: 400,
-                        msg: "Il luogo di nascita del codice fiscale non esiste"
+                        msg: "La nazione del codice fiscale non esiste"
                     };
                     identity.errors = error;
                 },
@@ -118,18 +120,24 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
         return identity;
     }
 
+    // Altrimenti cerca nella tabella dei comuni Italiani
+    const comuneOpt: Option<string> = getComune(codBirthPlace);
+    pipe(
+        comuneOpt,
+        match(
+            (): void => {
+                const error: IError = {
+                    code: 400,
+                    msg: "Il comune del codice fiscale non esiste"
+                };
+                identity.errors = error;
+            },
+            (comune: string): void => {
+                identity.birthPlace = normalizeField(comune);
+            }
+        )
+    );
 
-    const comune: string = await getComune(codBirthPlace, opType.getComune);
-    if(!comune) {
-        const error: IError = {
-            code: 400,
-            msg: "Il comune del codice fiscale non esiste"
-        };
-        identity.errors = error;
-        return identity;
-    }
-
-    identity.birthPlace = normalizeField(comune);
     return identity;
 }
 
@@ -141,8 +149,8 @@ export const getSex = (identity: Identity): Identity => {
     return identity;
 }
 
-export const reverseCF = async (identity: Identity): Promise<Either<IError, Identity>> => {
-    if(identity.codFiscale.length != 16) {
+export const reverseCF = (identity: Identity): Either<IError, Identity> => {
+    if(identity.codFiscale.length !== 16) {
         const error: IError = {
             code: 400,
             msg: "Codice fiscale invalido"
@@ -150,7 +158,7 @@ export const reverseCF = async (identity: Identity): Promise<Either<IError, Iden
         return left(error);
     }
 
-    const result: Promise<Identity> = pipe(
+    const result:Identity = pipe(
         identity,
         getSurname,
         getName,
@@ -161,7 +169,7 @@ export const reverseCF = async (identity: Identity): Promise<Either<IError, Iden
         getBirthPlace
     );
 
-    return !(await result).errors
-        ? right((await result))
-        : left((await result).errors as IError);
+    return !result.errors
+        ? right(result)
+        : left(result.errors as IError);
 }
