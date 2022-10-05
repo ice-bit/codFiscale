@@ -157,7 +157,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
 
         // Se il codice catastale esiste, salvalo nella cache
         if(codCatastale) {
-            await redisClient.set(identity.birthPlace.trim().toUpperCase(), codCatastale);
+            await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
             identity.codFiscale += codCatastale;
         } else {
             // Se il codice catastale e' nullo, prova a cercare il codice della nazione
@@ -251,6 +251,16 @@ export const getControlCode = async (identity: Promise<Identity>): Promise<Ident
 }
 
 export const getCF = async (identity: Identity): Promise<Either<IError, Identity>> => {
+    // Controlla che l'utente abbia fornito un singolo nome e un singolo cognome
+    if(identity.name.split(/\s/).length > 1 || identity.surname.split(/\s/).length > 1) {
+        const error: IError = {
+            code: 400,
+            msg: "Inserire un singolo nome e un singolo cognome"
+        };
+        return left(error as IError);
+    }
+
+
     const codiceFiscale: Promise<Identity> = pipe(
         identity, 
         getSurname, 

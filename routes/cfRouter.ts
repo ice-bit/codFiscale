@@ -98,14 +98,19 @@ cfRouter.post("/",
         .isEmpty()
         .withMessage("Inserire il mese di nascita"),
     check("birthYear")
-    .not()
+        .not()
         .isEmpty()
         .withMessage("Inserire l'anno di nascita"),
 ],
 (req: Request, res: Response) => {
     const normalizeField = (s: string): string => {
-        return s.trim().slice(0, 1).toUpperCase() +
-               s.trim().split(/\s/).join('').slice(1).toLowerCase();
+        return s.trim()[0].toUpperCase() +
+               s.trim().slice(1).toLowerCase();
+    }
+
+    const normalizeBirthPlace = (s: string): string => {
+        return s.trim()[0].toUpperCase() +
+               s.trim().slice(1).split(/\s/).filter(i => i).join(' ').toLowerCase();
     }
 
     const errors = validationResult(req);
@@ -120,7 +125,7 @@ cfRouter.post("/",
     // Normalizza i campi dell'identita'
     identity.name = normalizeField(identity.name);
     identity.surname = normalizeField(identity.surname);
-    identity.birthPlace = normalizeField(identity.birthPlace);
+    identity.birthPlace = normalizeBirthPlace(identity.birthPlace);
 
     getCF(identity).then(cfOption => {
         pipe(

@@ -92,7 +92,7 @@ export const getBirthPlace = (identity: Identity): Identity => {
     }
 
     const normalizeField = (s: string): string => {
-        return s.slice(0, 1).toUpperCase() + s.slice(1).toLowerCase();
+        return s[0].toUpperCase() + s.slice(1).toLowerCase();
     }
 
     // Estrai i caratteri del luogo di nascita dal codice fiscale
