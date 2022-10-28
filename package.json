@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "scss": "sass --watch scss/style.scss static/css/style.css",
+    "scss": "sass scss/style.scss static/css/style.css",
     "build": "npm run scss && tsc && cp -R codes.db dist",
     "start": "tsc && cp -R codes.db dist && node dist/server.js",
     "start:dev": "nodemon",
