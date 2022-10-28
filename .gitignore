@@ -135,3 +135,6 @@ venv
 # Misc
 .vscode
 .DS_STORE
+
+# SCSS output
+static/css/style.css

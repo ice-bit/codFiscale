@@ -1,0 +1,20 @@
+.smlDiv {
+    max-width: 110px;
+}
+
+.cfForm {
+    max-width: 570px;
+    padding: 15px;
+
+    .form-floating:focus-within {
+        z-index: 2;
+    }
+}
+
+.row {
+    padding-bottom: 20px;
+}
+
+#cfTitle {
+    padding-bottom: 30px;
+}

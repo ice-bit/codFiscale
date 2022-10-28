@@ -2,5 +2,5 @@
     "watch": ["."],
     "ext": ".ts, .js",
     "ignore": [],
-    "exec": "ts-node ./server.ts"
+    "exec": "ts-node ./server.ts & sass --watch scss/style.scss static/css/style.css"
 }

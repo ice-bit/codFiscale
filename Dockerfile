@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:lts
 # Prepare working directory
 RUN mkdir /app
 WORKDIR /app
