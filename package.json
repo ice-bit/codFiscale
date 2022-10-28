@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "scss": "sass --watch scss/style.scss static/css/style.css",
-    "build": "npm scss && tsc && cp -R codes.db dist",
+    "build": "npm run scss && tsc && cp -R codes.db dist",
     "start": "tsc && cp -R codes.db dist && node dist/server.js",
     "start:dev": "nodemon",
     "start:prod": "pm2 start process.json --no-daemon"
