@@ -134,6 +134,7 @@ venv
 
 # Misc
 .vscode
+.idea
 .DS_STORE
 
 # SCSS output

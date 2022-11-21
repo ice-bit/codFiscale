@@ -1,9 +1,9 @@
-import { Identity } from "../types/identity";
-import { Either, left, right } from "fp-ts/lib/Either";
-import { Option } from "fp-ts/lib/Option";
-import { pipe } from "fp-ts/lib/function";
-import { getCodCatastale, getCodNazione } from "./codes";
-import { IError } from "../types/error";
+import {Identity} from "../types/identity";
+import {Either, left, right} from "fp-ts/lib/Either";
+import {Option} from "fp-ts/lib/Option";
+import {pipe} from "fp-ts/lib/function";
+import {getCodCatastale, getCodNazione} from "./codes";
+import {IError} from "../types/error";
 import * as redis from "redis";
 
 export const getConsonants = (s: string): string => {
@@ -34,7 +34,7 @@ export const getSurname = (identity: Identity): Identity => {
         codCognome = codCognome.slice(0, 3);
     }
 
-    // Se il risultato < 3(i.e. il cognome e' di due caratteri), aggiungi 'x'
+    // Se il risultato < tre(i.e. Il cognome e' di due caratteri), aggiungi 'x'
     if(codCognome.length < 3)
         codCognome += 'x';
 
@@ -65,7 +65,7 @@ export const getName = (identity: Identity): Identity => {
         codName = codName.slice(0, 3);
     }
 
-    // Se il risultato < 3(i.e. il nome e' di due caratteri), aggiungi 'x'
+    // Se il risultato < tre(i.e. Il nome e' di due caratteri), aggiungi 'x'
     if(codName.length < 3)
         codName += 'x';
 
@@ -108,7 +108,7 @@ export const getBirthMonth = (identity: Identity): Identity => {
 
 export const getBirthDay = (identity: Identity): Identity => {
     let birthday: number = Number(identity.birthDay);
-    // Se il soggetto e' una donna, sommare 40 al giorno di nascita
+    // Se il soggetto è una donna, sommare 40 al giorno di nascita
     if(identity.sex === "female") {
         birthday += 40;
         identity.codFiscale += birthday;
@@ -143,7 +143,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
     const birthPlaceCode = await redisClient.get(identity.birthPlace.toUpperCase());
     if(birthPlaceCode) {
         identity.codFiscale += birthPlaceCode;
-        redisClient.quit();
+        await redisClient.quit();
         return identity;
     } else {
         // Altrimenti estrailo dal database
@@ -160,18 +160,17 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
             await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
             identity.codFiscale += codCatastale;
         } else {
-            // Se il codice catastale e' nullo, prova a cercare il codice della nazione
+            // Se il codice catastale è nullo, prova a cercare il codice della nazione
             const codNazioneOpt: Option<string> = getCodNazione(identity.birthPlace);
             const codNazione: void | string = pipe(
                 codNazioneOpt,
                 match(
                     (): void => {
                         // Se nemmeno il codice della nazione esiste, ritorna un errore
-                        const error: IError = {
+                        identity.errors = {
                             code: 400,
                             msg: "Il luogo di nascita selezionato non esiste"
                         };
-                        identity.errors = error;
                     },
                     (codNazione: string): string => {
                         identity.codFiscale += codNazione;
@@ -185,7 +184,7 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
                 await redisClient.set(identity.birthPlace.toUpperCase(), codNazione);
         }
 
-        redisClient.quit();
+        await redisClient.quit();
         return identity;
     }
 }

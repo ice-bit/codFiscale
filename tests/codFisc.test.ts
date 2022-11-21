@@ -2,6 +2,10 @@ import * as codFisc from "../models/codfisc";
 import { Identity } from "../types/identity";
 
 describe("Testing codFisc.ts file", () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
     test("getConsonants method should returns a string containing consonants only", () => {
         const vowels = "aeiou";
         const cons = "This is a test";

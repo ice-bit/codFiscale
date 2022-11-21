@@ -122,7 +122,7 @@ cfRouter.post("/",
 
     const identity: Identity = req.body;
     identity.codFiscale = "";
-    // Normalizza i campi dell'identita'
+    // Normalizza i campi dell'identità
     identity.name = normalizeField(identity.name);
     identity.surname = normalizeField(identity.surname);
     identity.birthPlace = normalizeBirthPlace(identity.birthPlace);

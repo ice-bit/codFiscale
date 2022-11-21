@@ -1,22 +1,18 @@
-import { Identity } from "../types/identity";
-import { Either, left, right } from "fp-ts/lib/Either";
-import { Option } from "fp-ts/lib/Option";
-import { pipe } from "fp-ts/lib/function";
-import { IError } from "../types/error";
-import { getComune, getNazione } from "./codes";
+import {Identity} from "../types/identity";
+import {Either, left, right} from "fp-ts/lib/Either";
+import {Option} from "fp-ts/lib/Option";
+import {pipe} from "fp-ts/lib/function";
+import {IError} from "../types/error";
+import {getComune, getNazione} from "./codes";
 
 export const getSurname = (identity: Identity): Identity => {
-    const surname: string = identity.codFiscale.slice(0, 3);
-
-    identity.surname = surname;
+    identity.surname = identity.codFiscale.slice(0, 3);
 
     return identity;
 }
 
 export const getName = (identity: Identity): Identity => {
-    const name: string = identity.codFiscale.slice(3, 6);
-
-    identity.name = name;
+    identity.name = identity.codFiscale.slice(3, 6);
 
     return identity;
 }
@@ -65,7 +61,7 @@ export const getBirthMonth = (identity: Identity): Identity => {
 
 export const getBirthDay = (identity: Identity): Identity => {
     const birthDay: number = Number(identity.codFiscale.slice(9, 11));
-    // Se il giorno di nascita e' '41' e '71', si tratta
+    // Se il giorno di nascita è '41' e '71', si tratta
     // di un soggetto di sesso femminile. Dunque si sottrae
     // '40' dal risultato finale
     if(birthDay >= 41 && birthDay <= 71)
@@ -73,11 +69,10 @@ export const getBirthDay = (identity: Identity): Identity => {
     else if(birthDay >= 1 && birthDay <= 31)
         identity.birthDay = birthDay;
     else {
-        const error: IError = {
+        identity.errors = {
             code: 400,
             msg: "Il giorno di nascita del codice fiscale risulta invalido"
         };
-        identity.errors = error;
     }
 
     return identity;
@@ -106,11 +101,10 @@ export const getBirthPlace = (identity: Identity): Identity => {
             nazioneOpt,
             match(
                 (): void => {
-                    const error: IError = {
+                    identity.errors = {
                         code: 400,
                         msg: "La nazione del codice fiscale non esiste"
                     };
-                    identity.errors = error;
                 },
                 (nazione: string): void => {
                     identity.birthPlace = normalizeField(nazione);
@@ -126,11 +120,10 @@ export const getBirthPlace = (identity: Identity): Identity => {
         comuneOpt,
         match(
             (): void => {
-                const error: IError = {
+                identity.errors = {
                     code: 400,
                     msg: "Il comune del codice fiscale non esiste"
                 };
-                identity.errors = error;
             },
             (comune: string): void => {
                 identity.birthPlace = normalizeField(comune);

@@ -11,4 +11,4 @@ export interface Identity {
     birthYear: string,
     codFiscale: string
     errors?: IError
-};
+}

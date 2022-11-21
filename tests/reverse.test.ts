@@ -1,8 +1,11 @@
 import * as reverse from "../models/reverse";
 import { Identity } from "../types/identity";
 
-
 describe("Testing reverse.ts file", () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
     test("getSurname method should returns the three characters of the surname", () => {
         const identity: Identity = {
             surname: "",
