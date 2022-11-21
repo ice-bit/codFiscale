@@ -9,7 +9,7 @@ realizzando mediante il framework Express. La codebase del backend segue il para
 funzionale ed è stata realizzata utilizzando la libreria [fp-ts](https://gcanti.github.io/fp-ts/).
 
 Questa webapp si avvale di un database SQLite per organizzare i _codici catastali_ e i
-_codici nazionali_, i quali vengono scaricati in maniera automatizzata(vedi TODO), 
+_codici nazionali_, i quali vengono scaricati in maniera automatizzata(vedi [#aggiornamento-databases](#aggiornamento-databases)), 
 rispettivamente, dal [sito del ministero dell'interno](https://dait.interno.gov.it/territorio-e-autonomie-locali/sut/elenco_codici_comuni.php")
 e dal [sito dell'ISTAT](https://www.istat.it/it/archivio/6747). Per velocizzarne l'accesso,
 i codici catastali e nazionali vengono salvati inoltre in una cache in RAM utilizzando 
