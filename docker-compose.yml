@@ -9,6 +9,7 @@ services:
     container_name: "codfisc-base"
     build:
       context: .
+      network: host
     environment:
       HOST: 0.0.0.0
       PORT: 9000 # Trim this value according to your configuration

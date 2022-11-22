@@ -9,7 +9,7 @@ realizzando mediante il framework Express. La codebase del backend segue il para
 funzionale ed è stata realizzata utilizzando la libreria [fp-ts](https://gcanti.github.io/fp-ts/).
 
 Questa webapp si avvale di un database SQLite per organizzare i _codici catastali_ e i
-_codici nazionali_, i quali vengono scaricati in maniera automatizzata(vedi [#aggiornamento-databases](#aggiornamento-databases)), 
+_codici nazionali_, i quali vengono scaricati in maniera automatizzata(vedi [aggiornamento-databases](#aggiornamento-databases)), 
 rispettivamente, dal [sito del ministero dell'interno](https://dait.interno.gov.it/territorio-e-autonomie-locali/sut/elenco_codici_comuni.php")
 e dal [sito dell'ISTAT](https://www.istat.it/it/archivio/6747). Per velocizzarne l'accesso,
 i codici catastali e nazionali vengono salvati inoltre in una cache in RAM utilizzando 
@@ -50,15 +50,15 @@ Nel caso si fosse scelto una porta differente, si modifichi la proprietà `proxy
 in modo appropriato.
 
 ## Aggiornamento Databases
-Di default la webapp fornisce un database(`codes.db`) contenente due tabelle per 
-i codici catastali e quelli nazionali, rispettivamente. Nel caso fosse necessario
+Di default la webapp fornisce un database(`codes.db`) contenente due tabelle: una per 
+i codici catastali e una per quelli nazionali. Nel caso fosse necessario
 aggiornare i codici con dati più recenti(ad esempio a seguito della soppressione di 
 un comune), seguire la seguente procedura:
 
 1. Scaricare dal [sito dell'ISTAT](https://www.istat.it/it/archivio/6747)
-l'**elenco codici e denominazioni delle unità territoriali estere** in formato `csv` 
+l'**elenco codici e denominazioni delle unità territoriali estere** in formato `zip` 
 alla voce _Elenco codici e denominazioni delle unità territoriali estere_. 
-2. Scompattare l'archivio e cancellare il file in formato `xls`.
+2. Scompattare dall'archivio solo il file in formato `csv`.
 2. Il file è in formato `latin1`(ISO-8859), prima di poterlo utilizzare, è necessario convertirlo
 in formato UTF8. Per farlo eseguire il comando:
 ```shell
@@ -119,7 +119,7 @@ Sass is watching for changes. Press Ctrl-C to stop.
 Server listening on http://127.0.0.1:3000
 ```
 
-Oltre al profilo `start:dev`, La webapp ne supporta altri 5:
+Oltre al profilo `start:dev`, la webapp ne supporta altri 5:
 - `test`: Per eseguire tutti gli unit tests;
 - `scss`: Per compilare i file SCSS;  
 - `build`: Per invocare il transpiler Typescript;  
