@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: codfisc
+    container: ubuntu
     services:
       redis:
         image: redis:latest
