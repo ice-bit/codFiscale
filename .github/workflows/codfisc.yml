@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ubuntu
     services:
       redis:
         image: redis:latest
@@ -16,6 +15,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v3
       - name: Use NodeJS
@@ -33,5 +34,5 @@ jobs:
         env:
           HOST: 127.0.0.1
           PORT: 9000
-          REDIS_HOST: redis
+          REDIS_HOST: 127.0.0.1
           REDIS_PORT: 6379
