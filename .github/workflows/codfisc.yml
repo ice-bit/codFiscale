@@ -1,0 +1,23 @@
+name: Codfiscale CI
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use NodeJS
+        uses: actions/setup-node@v2
+        with:
+          - node_version: "18.x"
+      - name: Install dependencies
+        run: npm install
+      - name: Run SCSS compiler
+        run: npm run scss
+      - name: Run build
+        run: npm run build
+      - name: Run tests
+        run: npm run test
