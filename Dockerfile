@@ -9,6 +9,7 @@ WORKDIR /app
 COPY . .
 RUN npm install --loglevel verbose
 RUN npm run build
+RUN npm test
 # Start app
 EXPOSE 9000
 CMD ["npm", "run", "start:prod"]
