@@ -25,7 +25,7 @@ export const getComune = (codCatastale: string): Option<string> => {
 // Data una nazione, estrai il codice nazionale
 export const getCodNazione = (nazione: string): Option<string> => {
     const db = new Database(dbPath);
-    const row = db.prepare("SELECT Code FROM codNazioni WHERE UPPER(City) = ?").get(nazione.toUpperCase());
+    const row = db.prepare("SELECT Code FROM codNazioni WHERE UPPER(State) = ?").get(nazione.toUpperCase());
     db.close();
 
     return !row ? none : some(row.Code);
@@ -34,8 +34,8 @@ export const getCodNazione = (nazione: string): Option<string> => {
 // Data un codice di una nazione, estrai la nazione
 export const getNazione = (codNazione: string): Option<string> => {
     const db = new Database(dbPath);
-    const row = db.prepare("SELECT City FROM codNazioni WHERE Code = ?").get(codNazione);
+    const row = db.prepare("SELECT State FROM codNazioni WHERE Code = ?").get(codNazione);
     db.close();
 
-    return !row ? none : some(row.City);
+    return !row ? none : some(row.State);
 }

@@ -23,11 +23,11 @@ def main():
 
     with open(sys.argv[1], 'r') as ftab, open(sys.argv[2], 'w') as fsql:
         fsql.write(gen_header_comment())
-        fsql.write(gen_create_query("codNazioni", "City", "Code"))
+        fsql.write(gen_create_query("codNazioni", "State", "Code"))
         for row in csv.reader(ftab, delimiter=','):
             if row[9] == "n.d." or row[6] == "Denominazione IT":
                 continue
-            fsql.write(gen_insert_query(row, "codNazioni", "City", "Code"))
+            fsql.write(gen_insert_query(row, "codNazioni", "State", "Code"))
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 /* Schema tabella generato automaticamente 
- * 2022-10-03:17:12:23.931280
+ * 2022-11-28:16:20:39.051864
  * Non modificare */
 CREATE TABLE codCatastali (
     City VARCHAR(64) NOT NULL,
