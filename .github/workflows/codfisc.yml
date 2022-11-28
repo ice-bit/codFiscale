@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use NodeJS
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node_version: "18.x"
+          node-version: "18.x"
       - name: Install dependencies
         run: npm install
       - name: Run SCSS compiler
@@ -32,5 +32,5 @@ jobs:
         env:
           HOST: 127.0.0.1
           PORT: 9000
-          REDIS_HOST: 127.0.0.1
+          REDIS_HOST: redis
           REDIS_PORT: 6379
