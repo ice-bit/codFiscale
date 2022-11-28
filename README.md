@@ -1,5 +1,4 @@
-# codFiscale
-
+# codFiscale ![](https://github.com/ice-bit/codFiscale/actions/workflows/codfisc.yml/badge.svg)
 codFiscale è una webapp scritta in Typescript per calcolare il 
 codice fiscale e il suo inverso. 
 L'applicazione è accessibile a [https://cf.marcocetica.com](https://cf.marcocetica.com).
