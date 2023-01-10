@@ -157,7 +157,12 @@ export const getBirthPlace = async (identity: Identity): Promise<Identity> => {
 
         // Se il codice catastale esiste, salvalo nella cache
         if(codCatastale) {
-            await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
+            // await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale);
+            await redisClient.set(identity.birthPlace.toUpperCase(), codCatastale, {
+                EX: (60 * 60 * 24), // Invalida la chiave dopo 24 ore
+                NX: true // Salva la chiave se e solo se non è già presente
+            });
+
             identity.codFiscale += codCatastale;
         } else {
             // Se il codice catastale è nullo, prova a cercare il codice della nazione

@@ -1,5 +1,5 @@
 /* Schema tabella generato automaticamente 
- * 2022-11-28:16:20:39.051864
+ * 2023-01-10:10:15:23.416260
  * Non modificare */
 CREATE TABLE codCatastali (
     City VARCHAR(64) NOT NULL,
@@ -526,7 +526,7 @@ INSERT INTO codCatastali(City,Code) VALUES ("BARBONA","A637");
 INSERT INTO codCatastali(City,Code) VALUES ("BARCELLONA POZZO DI GOTTO","A638");
 INSERT INTO codCatastali(City,Code) VALUES ("BARCIS","A640");
 INSERT INTO codCatastali(City,Code) VALUES ("BARD","A643");
-INSERT INTO codCatastali(City,Code) VALUES ("BARDELLO","A645");
+INSERT INTO codCatastali(City,Code) VALUES ("BARDELLO CON MALGESSO E BREGANO","");
 INSERT INTO codCatastali(City,Code) VALUES ("BARDI","A646");
 INSERT INTO codCatastali(City,Code) VALUES ("BARDINETO","A647");
 INSERT INTO codCatastali(City,Code) VALUES ("BARDOLINO","A650");
@@ -892,7 +892,6 @@ INSERT INTO codCatastali(City,Code) VALUES ("BRANZI","B123");
 INSERT INTO codCatastali(City,Code) VALUES ("BRAONE","B124");
 INSERT INTO codCatastali(City,Code) VALUES ("BREBBIA","B126");
 INSERT INTO codCatastali(City,Code) VALUES ("BREDA DI PIAVE","B128");
-INSERT INTO codCatastali(City,Code) VALUES ("BREGANO","B131");
 INSERT INTO codCatastali(City,Code) VALUES ("BREGANZE","B132");
 INSERT INTO codCatastali(City,Code) VALUES ("BREGNANO","B134");
 INSERT INTO codCatastali(City,Code) VALUES ("BREMBATE","B137");
@@ -3719,7 +3718,6 @@ INSERT INTO codCatastali(City,Code) VALUES ("MALEO","E852");
 INSERT INTO codCatastali(City,Code) VALUES ("MALESCO","E853");
 INSERT INTO codCatastali(City,Code) VALUES ("MALETTO","E854");
 INSERT INTO codCatastali(City,Code) VALUES ("MALFA","E855");
-INSERT INTO codCatastali(City,Code) VALUES ("MALGESSO","E856");
 INSERT INTO codCatastali(City,Code) VALUES ("MALGRATE","E858");
 INSERT INTO codCatastali(City,Code) VALUES ("MALITO","E859");
 INSERT INTO codCatastali(City,Code) VALUES ("MALLARE","E860");
@@ -5269,7 +5267,7 @@ INSERT INTO codCatastali(City,Code) VALUES ("PONDERANO","G820");
 INSERT INTO codCatastali(City,Code) VALUES ("PONNA","G821");
 INSERT INTO codCatastali(City,Code) VALUES ("PONSACCO","G822");
 INSERT INTO codCatastali(City,Code) VALUES ("PONSO","G823");
-INSERT INTO codCatastali(City,Code) VALUES ("PONT-CANAVESE","G826");
+INSERT INTO codCatastali(City,Code) VALUES ("PONT CANAVESE","G826");
 INSERT INTO codCatastali(City,Code) VALUES ("PONT-SAINT-MARTIN","G854");
 INSERT INTO codCatastali(City,Code) VALUES ("PONTASSIEVE","G825");
 INSERT INTO codCatastali(City,Code) VALUES ("PONTBOSET","G545");

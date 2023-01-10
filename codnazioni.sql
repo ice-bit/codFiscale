@@ -1,5 +1,5 @@
 /* Schema tabella generato automaticamente 
- * 2022-11-28:16:20:03.802313
+ * 2023-01-10:10:13:37.901983
  * Non modificare */
 CREATE TABLE codNazioni (
     State VARCHAR(64) NOT NULL,
